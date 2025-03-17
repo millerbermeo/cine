@@ -99,10 +99,10 @@
         <div id="peliculasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         <!-- Modal -->
         <dialog id="trailerModal" class="modal">
-            <div class="modal-box w-11/12 max-w-5xl">
+            <div class="modal-box w-11/12 max-w-2xl ">
 
                 <h2 class="text-xl font-semibold mb-4">Tráiler de la Película</h2>
-                <div id="trailerContainer"></div>
+                <div c;a id="trailerContainer"></div>
             </div>
             <form method="dialog" class="modal-backdrop">
                 <button>close</button>
@@ -134,9 +134,9 @@
                     <div class="card-body">
                         <h2 class="card-title">${pelicula.nombre}</h2>
                         <p>${pelicula.descripcion}</p>
-                        <p>${pelicula.trailer_url}</p>
+                        <p class="hidden">${pelicula.trailer_url}</p>
                         <div class="card-actions  justify-end">
-                            <button class="btn text-white btn-success btntrailer" data-trailer-url="${pelicula.trailer_url}">Ver más</button>
+                            <button class="btn text-white btn-success btntrailer" data-id="${pelicula.id}" data-nombre="${pelicula.nombre}" data-descripcion="${pelicula.descripcion}" data-categoria="${pelicula.categoria}" data-year="${pelicula.year}" data-foto="storage/${pelicula.foto}" data-trailer-url="${pelicula.trailer_url}">Ver más</button>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
             )
             .join("");
 
-        // Delegar el evento click para los botones dinámicos
+
         document.getElementById('peliculasContainer').addEventListener('click', function(event) {
             if (event.target.classList.contains('btntrailer')) {
                 const trailerUrl = event.target.getAttribute('data-trailer-url');
@@ -156,19 +156,16 @@
         console.error("Error al obtener las películas:", error);
     }
 
-    // Función para abrir el modal y mostrar el tráiler
     function showTrailer(url) {
         trailerModal.showModal();
+        
         const trailerContainer = document.getElementById('trailerContainer');
-        const iframe = `  <iframe  src="${url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+        const iframe = `  <iframe width="560" height="315" src="${url}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
         trailerContainer.innerHTML = iframe;
         document.getElementById('trailerModal').classList.add('modal-open');
       
     }
 
-    // Función para extraer el ID del video de la URL de YouTube
- 
-    // Función para cerrar el modal
     function closeModal() {
     const trailerModal = document.getElementById('trailerModal');
     trailerModal.close(); // Cierra el modal

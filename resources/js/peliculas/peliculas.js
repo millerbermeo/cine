@@ -62,7 +62,7 @@ const renderTable = () => {
             <td>${pelicula.nombre}</td>
             <td>${pelicula.descripcion}</td>
             <td>${pelicula.categoria}</td>
-            <td><img src="storage/${pelicula.foto}" alt="${pelicula.foto}" width="50"></td>
+            <td><img class="rounded-full h-12 w-12" src="storage/${pelicula.foto}" alt="${pelicula.foto}""></td>
             <td>${pelicula.year}</td>
             <td>${pelicula.trailer_url}</td>
             <td><button  type="button" class="btn-abrir btn flex btn-active rounded-4xl btn-info text-sm text-white" data-pelicula-id="${pelicula.id}">Editar</button></td>
