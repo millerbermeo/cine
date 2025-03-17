@@ -4,7 +4,7 @@
 </head>
 
 <div id="sidebar"
-    class="w-[290px] min-w-[200px] h-screen border-r-[1px] border-gray-400 shadow-md bg-[#ffffff] transform -translate-x-full transition-transform duration-300 sm:translate-x-0">
+    class="w-[290px] min-w-[200px] h-screen border-r-1 border-gray-300 shadow-md bg-[#ffffff] transform -translate-x-full transition-transform duration-300 sm:translate-x-0">
     <div class="flex items-center gap-3 py-4 px-5 bg-[#FDF2F2]">
         <img class="w-10 h-10 rounded-full bg-[#FF5252]" src="{{ asset('images/logo.png') }}" alt="Logo">
         <span class="text-2xl font-semibold text-[#FF5252]">Net Pelis</span>
@@ -14,31 +14,31 @@
         <ul class="space-y-2">
             <li>
                 <a href="/home"
-                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 hover:bg-[#FF690F] hover:text-[#ffffff] rounded-lg transition-all duration-200">
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 hover:bg-success hover:text-[#ffffff] rounded-lg transition-all duration-200">
                     <i class="fas fa-home"></i> Home
                 </a>
             </li>
             <li>
                 <a href="/usuarios"
-                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-[#FF690F] hover:text-[#ffffff] transition-all duration-200">
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
                     <i class="fas fa-users"></i> Usuarios
                 </a>
             </li>
             <li>
                 <a href="/peliculas"
-                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-[#FF690F] hover:text-[#ffffff] transition-all duration-200">
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
                     <i class="fas fa-film"></i> Peliculas
                 </a>
             </li>
             <li>
                 <a href="/categorias"
-                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-[#FF690F] hover:text-[#ffffff] transition-all duration-200">
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
                     <i class="fas fa-list"></i> Categorias
                 </a>
             </li>
             <li>
                 <button onclick="id_modal_logout.showModal()"
-                    class="flex items-center gap-x-3 py-3 px-4 text-lg text-[#FF5252] rounded-lg hover:bg-[#FF690F] hover:text-[#ffffff] transition-all duration-200">
+                    class="flex items-center gap-x-3 py-3 px-4 text-lg text-[#FF5252] rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
                     🔓 Logout
                 </button>
             </li>
@@ -80,7 +80,7 @@
       const linkPath = item.getAttribute("href");
 
       if (currentPath === linkPath) {
-        item.classList.add("bg-[#FF690F]", "text-white");  // Fondo naranja y texto blanco
+        item.classList.add("bg-success", "text-white");  // Fondo naranja y texto blanco
       } else {
         item.classList.remove("bg-[#FF690F]", "text-white");  // Eliminar la clase cuando no es la ruta activa
       }
