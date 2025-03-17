@@ -3,7 +3,7 @@
 @section('content')
 <div>
 
-    <div class="flex justify-between gap-5 my-5">
+    {{-- <div class="flex justify-between gap-5 my-5">
         <!-- Card 1: Total Películas -->
         <div
             class="w-full h-32 text-[#FF5252] bg-info mb-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-    </div>
+    </div> --}}
 
 
     <div class="flex flex-col gap-5 my-3">
@@ -135,7 +135,7 @@
                         <h2 class="card-title">${pelicula.nombre}</h2>
                         <p>${pelicula.descripcion}</p>
                         <p>${pelicula.trailer_url}</p>
-                        <div class="card-actions hidden justify-end">
+                        <div class="card-actions  justify-end">
                             <button class="btn text-white btn-success btntrailer" data-trailer-url="${pelicula.trailer_url}">Ver más</button>
                         </div>
                     </div>

@@ -185,6 +185,20 @@ document.getElementById("submitFormPeli").addEventListener("click", function () 
             return;
         }
 
+        const peliculaData = {
+            nombre: titulo,
+            descripcion: director,
+            categoria: genero,
+            year: fechaEstreno,
+            trailer_url: trailer_url,
+        };
+    
+        const fotoInput = document.getElementById("foto");
+
+        if (fotoInput.files.length > 0) {
+            peliculaData.foto = fotoInput.files[0]; // Agregar la foto si se seleccionó
+        }
+
         const formData = new FormData();
         formData.append("nombre", titulo);
         formData.append("descripcion", director);
@@ -192,30 +206,30 @@ document.getElementById("submitFormPeli").addEventListener("click", function () 
         formData.append("year", fechaEstreno);
         formData.append("trailer_url", trailer_url);
 
-        const fotoInput = document.getElementById("foto");
         if (fotoInput.files.length > 0) {
             formData.append("foto", fotoInput.files[0]); // Agregar la foto si se seleccionó
         }
 
         if (peliculaId) {
-            formData.append("id", peliculaId); // Incluir el ID de la película para la actualización
-            console.log('vacio',formData)
+            peliculaData.id = peliculaId; // Incluir el ID de la película para la actualización
+            console.log('Datos para actualizar:', peliculaData);
     
-            axios.put(`/put-peliculas/${peliculaId}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data", // Asegurarse de que sea FormData
-                    },
-                })
-                .then((response) => {
-                    showToast("Película actualizada con éxito", "success");
-                    document.getElementById("id_modal_pelicula").close();
-                    listarPeliculas();
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    showToast("No se pudo actualizar la película", "error");
-                });
-                limpiarFormularioPeliculas()
+            axios.put(`/put-peliculas/${peliculaId}`, peliculaData, {
+                headers: {
+                    "Content-Type": "application/json", // Enviar como JSON
+                },
+            })
+            .then((response) => {
+                showToast("Película actualizada con éxito", "success");
+                document.getElementById("id_modal_pelicula").close();
+                listarPeliculas();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                showToast("No se pudo actualizar la película", "error");
+            });
+            document.getElementById("peliculaId").value = ""
+            limpiarFormularioPeliculas();
         } else {
             axios
                 .post("/post-peliculas", formData, {

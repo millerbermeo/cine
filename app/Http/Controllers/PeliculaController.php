@@ -27,7 +27,7 @@ class PeliculaController extends Controller
             'categoria' => 'required|string',
             'year' => 'required|integer',
             'trailer_url' => 'nullable',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'nullable',
         ]);
     
         $fotoPath = null;
@@ -55,30 +55,20 @@ class PeliculaController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Encuentra la película por su ID
+
         $pelicula = Pelicula::findOrFail($id);
-    
-        // Validación de los datos
-      
-    
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('peliculas', 'public'); 
-        }
-    
-        // Actualizar los datos de la película
+        
         $pelicula->update([
             'nombre' => $request->nombre ?? $pelicula->nombre,
             'descripcion' => $request->descripcion,
             'categoria' => $request->categoria ?? $pelicula->categoria,
             'year' => $request->year ?? $pelicula->year,
             'trailer_url' => $request->trailer_url,
-            'foto' => $fotoPath, // Si se subió una foto nueva, se guarda la ruta
         ]);
     
-        // Retornar la respuesta
-        return response()->json(['message' => 'Película actualizada con éxito', 'pelicula' => $pelicula]);
+        return response()->json($pelicula);
     }
+    
     
 
     public function destroy($id)
