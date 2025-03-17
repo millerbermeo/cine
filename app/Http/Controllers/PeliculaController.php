@@ -14,7 +14,9 @@ class PeliculaController extends Controller
     
     public function index()
     {
-        return response()->json(Pelicula::all());
+        $users = Pelicula::orderBy('created_at', 'desc')->get();
+
+        return response()->json( $users);
     }
 
     public function store(Request $request)
@@ -22,16 +24,29 @@ class PeliculaController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
-            'categoria' => 'required|string|max:255',
-            'foto' => 'nullable|string',
-            'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'trailer_url' => 'nullable|string'
+            'categoria' => 'required|string',
+            'year' => 'required|integer',
+            'trailer_url' => 'nullable',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
-        $pelicula = Pelicula::create($request->all());
-
-        return response()->json($pelicula, 201);
+    
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('peliculas', 'public'); // Guarda en storage/app/public/peliculas
+        }
+    
+        $pelicula = Pelicula::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'categoria' => $request->categoria,
+            'year' => $request->year,
+            'trailer_url' => $request->trailer_url,
+            'foto' => $fotoPath,
+        ]);
+    
+        return response()->json(['message' => 'Película guardada', 'pelicula' => $pelicula]);
     }
+    
 
     public function show($id)
     {
@@ -40,11 +55,31 @@ class PeliculaController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Encuentra la película por su ID
         $pelicula = Pelicula::findOrFail($id);
-        $pelicula->update($request->all());
-
-        return response()->json($pelicula);
+    
+        // Validación de los datos
+      
+    
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('peliculas', 'public'); 
+        }
+    
+        // Actualizar los datos de la película
+        $pelicula->update([
+            'nombre' => $request->nombre ?? $pelicula->nombre,
+            'descripcion' => $request->descripcion,
+            'categoria' => $request->categoria ?? $pelicula->categoria,
+            'year' => $request->year ?? $pelicula->year,
+            'trailer_url' => $request->trailer_url,
+            'foto' => $fotoPath, // Si se subió una foto nueva, se guarda la ruta
+        ]);
+    
+        // Retornar la respuesta
+        return response()->json(['message' => 'Película actualizada con éxito', 'pelicula' => $pelicula]);
     }
+    
 
     public function destroy($id)
     {

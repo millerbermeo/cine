@@ -47,9 +47,9 @@
 </div>
 
 <dialog id="id_modal_pelicula" class="modal">
-    <input id="peliculaId" type="hidden" />
+    <input id="peliculaId" class="hidden" />
     <div class="modal-box w-11/12 max-w-5xl">
-        <h3 id="modalTitle" class="text-lg font-bold text-center mb-5">Registrar Película</h3>
+        <h3 id="modalTitle" class="text-lg font-bold text-center mb-5">Datos Película</h3>
         <div>
             <div class="w-full flex justify-between">
                 <fieldset class="fieldset w-full">

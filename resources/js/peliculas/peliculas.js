@@ -1,5 +1,5 @@
 import { showToast } from "../toast";
-import { limpiarFormulario } from "../usuarios/clean-form";
+import { limpiarFormularioPeliculas } from "../usuarios/clean-form";
 import { formatFecha } from "../usuarios/format-date";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -19,7 +19,7 @@ function mostrarModalEliminar(id) {
 
 function openModal() {
     id_modal_pelicula.showModal();
-    limpiarFormulario();
+    limpiarFormularioPeliculas();
 }
 
 function closeModal() {
@@ -32,7 +32,7 @@ btnOpenModal.addEventListener("click", (e) => {
 
 btnCloseModal.addEventListener("click", (e) => {
     closeModal();
-    limpiarFormulario();
+    limpiarFormularioPeliculas();
 });
 
 // FUNCIONES PARA LA DATATABLE
@@ -144,8 +144,8 @@ const listarPeliculas = () => {
 
 // FUNCION QUE OBTIENE UNA PELICULA
 const obtenerPelicula = (id) => {
-    console.log('id',id)
-    id_modal_pelicula.showModal()
+    console.log("id", id);
+    id_modal_pelicula.showModal();
     fetch(`/get-peliculas/${id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -156,7 +156,7 @@ const obtenerPelicula = (id) => {
             document.getElementById("categoria").value = data.categoria;
             document.getElementById("year").value = data.year;
             document.getElementById("trailer_url").value = data.trailer_url;
-console.log(data)
+            console.log(data);
             id_modal_pelicula.showModal();
         })
         .catch((error) =>
@@ -164,31 +164,46 @@ console.log(data)
         );
 };
 
-// REGISTRAR O ACTUALIZAR UNA PELICULA
-document
-    .getElementById("submitFormPeli")
-    .addEventListener("click", function () {
+
+document.getElementById("submitFormPeli").addEventListener("click", function () {
         const peliculaId = document.getElementById("peliculaId").value;
         const titulo = document.getElementById("nombre").value;
         const director = document.getElementById("descripcion").value;
         const genero = document.getElementById("categoria").value;
         const fechaEstreno = document.getElementById("year").value;
-        const poster = document.getElementById("foto").value;
         const trailer_url = document.getElementById("trailer_url").value;
 
-        const data = {
-            nombre: titulo,
-            descripcion: director,
-            categoria: genero,
-            year: fechaEstreno,
-            foto: poster, // Aquí podrías incluir la imagen de la película
-            trailer_url: trailer_url
-        };
+        if (!titulo || !genero) {
+            showToast("Por favor, complete los campos obligatorios.", "error");
+            return;
+        }
+
+        if (!/^\d{4}$/.test(fechaEstreno)) {
+            showToast("Ingrese un Año Válido", "error");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("nombre", titulo);
+        formData.append("descripcion", director);
+        formData.append("categoria", genero);
+        formData.append("year", fechaEstreno);
+        formData.append("trailer_url", trailer_url);
+
+        const fotoInput = document.getElementById("foto");
+        if (fotoInput.files.length > 0) {
+            formData.append("foto", fotoInput.files[0]); // Agregar la foto si se seleccionó
+        }
 
         if (peliculaId) {
-            data.id = peliculaId; // Incluir el ID de la película
-            axios
-                .put(`/put-peliculas/${peliculaId}`, data)
+            formData.append("id", peliculaId); // Incluir el ID de la película para la actualización
+            console.log('vacio',formData)
+    
+            axios.put(`/put-peliculas/${peliculaId}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Asegurarse de que sea FormData
+                    },
+                })
                 .then((response) => {
                     showToast("Película actualizada con éxito", "success");
                     document.getElementById("id_modal_pelicula").close();
@@ -198,11 +213,14 @@ document
                     console.error("Error:", error);
                     showToast("No se pudo actualizar la película", "error");
                 });
-
-            limpiarFormulario();
+                limpiarFormularioPeliculas()
         } else {
             axios
-                .post("/post-peliculas", data)
+                .post("/post-peliculas", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Asegurarse de que sea FormData
+                    },
+                })
                 .then((response) => {
                     showToast("Película creada con éxito", "success");
                     document.getElementById("id_modal_pelicula").close();
@@ -212,8 +230,7 @@ document
                     console.error("Error:", error);
                     showToast("No se pudo registrar la película", "error");
                 });
-
-            limpiarFormulario();
+                limpiarFormularioPeliculas()
         }
     });
 

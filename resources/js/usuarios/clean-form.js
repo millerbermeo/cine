@@ -11,3 +11,12 @@ export const limpiarFormulario = () => {
     document.getElementById("nacionalidadSelect").value = "";
     document.getElementById("password").value = "";
 };
+
+export const limpiarFormularioPeliculas = () => {
+    document.getElementById("nombre").value = "";         // Título de la película
+    document.getElementById("descripcion").value = "";    // Descripción (director)
+    document.getElementById("categoria").value = "";      // Género
+    document.getElementById("year").value = "";           // Año de estreno
+    document.getElementById("trailer_url").value = "";    // URL del trailer
+    document.getElementById("foto").value = "";           // Foto de la película
+};

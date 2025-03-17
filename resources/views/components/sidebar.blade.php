@@ -52,10 +52,10 @@
 
 
             <div class="modal-action">
-                <form method="dialog">
+                {{-- <form method="dialog">
                     <!-- if there is a button in form, it will close the modal -->
                     <button class="btn btn-info">Cancelar</button>
-                </form>
+                </form> --}}
                 <div class="modal-action m-0 p-0">
                     <button id="logoutsession" class="btn btn-success">Cerrar Session</button>
                 </div>

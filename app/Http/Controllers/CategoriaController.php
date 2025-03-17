@@ -15,7 +15,7 @@ class CategoriaController extends Controller
     // Obtener todas las categorías
     public function index()
     {
-        $categorias = Categoria::all();
+        $categorias = Categoria::orderBy('created_at', 'desc')->get();
         return response()->json($categorias);
     }
 
