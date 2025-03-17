@@ -38,7 +38,7 @@
         document.getElementById("peliculasContainer").innerHTML = peliculas
             .map(
                 (pelicula) => `
-                <div class="card card-side bg-base-100 shadow-sm">
+                <div class="card card-side border-gray-300 border bg-base-100 shadow max-h-[155px]">
                     <figure>
                         <img class="h-[150px] ${pelicula.foto ? '' : 'hidden'} w-[120px] bg-white object-cover" src="storage/${pelicula.foto}" />
                     </figure>
