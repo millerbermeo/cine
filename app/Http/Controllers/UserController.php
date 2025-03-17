@@ -15,8 +15,8 @@ class UserController extends Controller
     // Obtener todos los usuarios
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->get(); // Obtiene todos los usuarios
-        return response()->json($users); // Responde con los usuarios en formato JSON
+        $users = User::orderBy('created_at', 'desc')->get();
+        return response()->json($users);
     }
 
     // Obtener un usuario por ID
@@ -28,7 +28,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        return response()->json($user); // Responde con el usuario en formato JSON
+        return response()->json($user);
     }
 
     // Crear un nuevo usuario
@@ -45,8 +45,8 @@ class UserController extends Controller
         $user->nombre = $request->nombre;
         $user->apellido = $request->apellido;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
         $user->identificacion = $request->identificacion;
+        $user->password = bcrypt($request->password ?? $request->identificacion);
         $user->edad = $request->edad;
         $user->telefono = $request->telefono;
         $user->direccion = $request->direccion;

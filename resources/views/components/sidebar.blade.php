@@ -1,27 +1,15 @@
-<!-- Botón para abrir el Sidebar -->
 
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
 </head>
-{{-- <div class="sm:hidden py-16 text-center">
-    <button id="openSidebar"
-        class="py-2 px-4 bg-[#FF690F] border border-[#FF690F] text-white text-sm font-medium rounded-lg hover:bg-[#E56A0E] transition-colors duration-300">
-        Open Sidebar
-    </button>
-</div> --}}
 
-<!-- Sidebar -->
 <div id="sidebar"
     class="w-[290px] min-w-[200px] h-screen border-r-[1px] border-gray-200 bg-white transform -translate-x-full transition-transform duration-300 sm:translate-x-0">
-    <!-- Encabezado del Sidebar -->
     <div class="flex items-center gap-3 py-4 px-5 bg-[#FDF2F2]">
         <img class="w-10 h-10 rounded-full bg-[#FF5252]" src="{{ asset('images/logo.png') }}" alt="Logo">
         <span class="text-2xl font-semibold text-[#FF5252]">Net Pelis</span>
         <button id="closeSidebar" class="sm:hidden text-gray-600 hover:text-gray-800 ml-auto">✕</button>
     </div>
-
-    <!-- Navegación -->
     <nav class="p-4">
         <ul class="space-y-2">
             <li>
@@ -57,8 +45,6 @@
         </ul>
     </nav>
 
-
-
     <dialog id="id_modal_logout" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-normal text-center mb-5">Esta seguro que desea cerrar la Session?</h3>
@@ -81,7 +67,6 @@
 
 </div>
 
-<!-- Script de Funcionalidad -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
     // Obtener la ruta actual

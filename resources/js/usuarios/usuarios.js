@@ -64,11 +64,9 @@ const renderTable = () => {
             <td>${user.telefono}</td>
             <td>${user.direccion}</td>
             <td>${user.sexo}</td>
-
-      
             <td>${user.nacionalidad}</td>
-            <td class="flex gap-2"><button type="button" class="btn-abrir btn  flex btn-active rounded-full  w-12 btn-info text-xs text-white" data-user-id="${user.id}">Editar</button>
-                 <button  class="btn  flex btn-active w-12 btn-error rounded-full text-xs text-white btn-eliminar-m" data-user-id-delete="${user.id}">Eliminar</button>
+            <td class="flex gap-2"><button type="button" class="btn-abrir btn  flex rounded-4xl btn-info text-sm text-white" data-user-id="${user.id}">Editar</button>
+                 <button  class="btn  flex   btn-error rounded-4xl text-sm text-white btn-eliminar-m" data-user-id-delete="${user.id}">Eliminar</button>
             </td>
         </tr>
     `
@@ -187,26 +185,58 @@ document.getElementById("submitForm").addEventListener("click", function () {
     const nacionalidad = document.getElementById("nacionalidadSelect").value;
     const password = document.getElementById("password").value;
 
-    // Verificar que todos los campos obligatorios estén completos
+    // Expresiones regulares para validaciones
+    const regexNombreApellido = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/; // Solo letras y espacios
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Formato email
+    const regexTelefono = /^[0-9]{7,15}$/; // Solo números, entre 7 y 15 dígitos
+    const regexEdad = /^[0-9]{1,3}$/; // Solo números hasta 3 dígitos
+
     if (!nombre || !identificacion || !email) {
-        alert("Por favor, complete los campos obligatorios.");
+        showToast("Por favor, complete los campos obligatorios.", "error");
         return;
     }
+
+    // Validaciones
+    if (!nombre || !regexNombreApellido.test(nombre)) {
+        showToast("El nombre solo puede contener letras y espacios", "error");
+        return;
+    }
+    if (!apellido || !regexNombreApellido.test(apellido)) {
+        showToast("El apellido solo puede contener letras y espacios", "error");
+        return;
+    }
+    if (!identificacion) {
+        showToast("El campo Identificación es obligatorio", "error");
+        return;
+    }
+    if (!email || !regexEmail.test(email)) {
+        showToast("Ingrese un correo válido", "error");
+        return;
+    }
+    if (!telefono || !regexTelefono.test(telefono)) {
+        showToast("El teléfono debe contener entre 7 y 15 dígitos", "error");
+        return;
+    }
+    if (!edad || !regexEdad.test(edad) || edad < 0 || edad > 120) {
+        showToast("Ingrese una edad válida (entre 0 y 120)", "error");
+        return;
+    }
+
 
     // Crear objeto de datos para enviar
     const data = {
         nombre: nombre,
         apellido: apellido,
         email: email,
-        password: password, // Añadir la contraseña
+        password: password,
         identificacion: identificacion,
         telefono: telefono,
         edad: edad,
         direccion: direccion,
         sexo: sexo,
         nacionalidad: nacionalidad,
-        foto: "path/to/photo.jpg", // Aquí podrías incluir la foto si es necesario
-        estado: "activo", // Suponiendo que el estado inicial del usuario sea activo
+        foto: "path/to/photo.jpg",
+        estado: "activo",
     };
 
     // Si hay un userId, significa que es una actualización

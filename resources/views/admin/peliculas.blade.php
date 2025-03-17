@@ -115,10 +115,10 @@
     <div class="modal-action">
         <form method="dialog">
           <!-- if there is a button, it will close the modal -->
-          <button class="btn">Cancelar</button>
+          <button class="btn btn-info">Cancelar</button>
         </form>
 
-        <button id="btn-confirmar-eliminar" class="btn btn-danger">Confirmar</button>
+        <button id="btn-confirmar-eliminar" class="btn btn-success">Confirmar</button>
 
       </div>
 

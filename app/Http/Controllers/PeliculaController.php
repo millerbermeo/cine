@@ -7,6 +7,11 @@ use App\Models\Pelicula;
 
 class PeliculaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         return response()->json(Pelicula::all());

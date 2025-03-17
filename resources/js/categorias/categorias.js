@@ -1,4 +1,5 @@
 import { showToast } from "../toast";
+import { formatFecha } from "../usuarios/format-date";
 
 document.addEventListener("DOMContentLoaded", function () {
     listarCategorias();
@@ -43,9 +44,9 @@ const renderTable = () => {
         <tr>
             <td>${categoria.id}</td>
             <td>${categoria.nombre}</td>
-            <td>${categoria.created_at}</td>
-            <td><button class="btn btn-info btn-abrir" data-categoria-id="${categoria.id}">Editar</button></td>
-            <td><button class="btn btn-danger btn-eliminar" data-categoria-id-delete="${categoria.id}">Eliminar</button></td>
+            <td>${formatFecha(categoria.created_at)}</td>
+            <td><button class="btn btn-info rounded-4xl text-white btn-abrir" data-categoria-id="${categoria.id}">Editar</button></td>
+            <td><button class="btn rounded-4xl btn-error text-white btn-eliminar" data-categoria-id-delete="${categoria.id}">Eliminar</button></td>
         </tr>
     `
         )

@@ -17,7 +17,7 @@
 
             <form id="loginForm" class="mt-6">
                 @csrf
-                <!-- Campo de correo -->
+                <!-- correo -->
                 <div class="relative">
                     <label class="block text-sm text-gray-400 mb-1">Correo Electrónico</label>
                     <div class="relative">
@@ -28,7 +28,7 @@
                     <span class="email-campo m-1 mt-2 text-red-500"></span>
                 </div>
 
-                <!-- Campo de contraseña -->
+                <!-- contraseña -->
                 <div class="relative">
                     <label class="block text-sm text-gray-400 mb-1">Contraseña</label>
                     <div class="relative">
@@ -39,8 +39,6 @@
                     <span class="password-campo m-1 mt-2 text-red-500"></span>
                 </div>
 
-
-                <!-- Botones -->
                 <div class="flex justify-between">
                     <button type="button" onclick="id_auth_usuario.showModal()"
                         class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white hover:bg-gray-600 transition">
@@ -55,71 +53,6 @@
         </div>
     </div>
 </div>
-{{-- <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        // Obtener los elementos
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-        const emailError = document.querySelector(".email-campo");
-        const passwordError = document.querySelector(".password-campo");
-
-        // Limpiar mensajes previos
-        emailError.textContent = "";
-        passwordError.textContent = "";
-
-        let isValid = true;
-
-        // Validar email
-        if (!emailInput.value.trim()) {
-            emailError.textContent = "El email es requerido";
-            isValid = false;
-        } else if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
-            emailError.textContent = "Ingrese un email válido";
-            isValid = false;
-        }
-
-        // Validar contraseña
-        if (!passwordInput.value.trim()) {
-            passwordError.textContent = "La contraseña es requerida";
-            isValid = false;
-        } else if (passwordInput.value.length < 6) {
-            passwordError.textContent = "La contraseña debe tener al menos 6 caracteres";
-            isValid = false;
-        }
-
-        // Si no es válido, detener el envío
-        if (!isValid) return;
-
-        // Enviar formulario con Fetch API si es válido
-        const formData = new FormData(this);
-
-        fetch("/post-login", {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
-                "Accept": "application/json",
-            },
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error al iniciar sesión");
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert(data.message);
-            window.location.href = data.redirect;
-        })
-        .catch(error => {
-            alert("Credenciales incorrectas. Inténtelo de nuevo.");
-            console.error(error);
-        });
-    });
-</script> --}}
-
 
 <dialog id="id_auth_usuario" class="modal">
     <input id="userId" type="hidden" />
@@ -146,7 +79,6 @@
         </div>
         <div class="flex items-start justify-end gap-5 mt-4">
             <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
                 <button id="btn-close-auth" class="btn btn-info">Cerrar</button>
               </form>
           
