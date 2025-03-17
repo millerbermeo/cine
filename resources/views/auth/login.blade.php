@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="bg-gray-900 text-[#FF5252] flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
-    <a href="#" class="font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
+<div class="bg-gray-900  flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
+    <a href="#" class="font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2 text-[#FF5252]">
         <i class="fa-solid fa-user-circle text-3xl"></i>
         Net Pelix
     </a>
@@ -12,14 +12,14 @@
         <div class="relative h-px w-full bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
 
         <div class="mx-5 border border-gray-700 shadow-lg rounded-lg bg-gray-800 p-6 lg:rounded-xl">
-            <h3 class="text-xl font-semibold leading-6 tracking-tighter text-center">Login</h3>
+            <h3 class="text-xl font-semibold leading-6 tracking-tighter text-center text-[#FF5252]">Login</h3>
             <p class="mt-2 text-sm text-gray-400 text-center">Bienvenido de nuevo, ingresa tus credenciales.</p>
 
             <form id="loginForm" class="mt-6">
                 @csrf
                 <!-- correo -->
                 <div class="relative">
-                    <label class="block text-sm text-[#FF5252] mb-1">Correo Electrónico</label>
+                    <label class="block text-sm text-gray-400 mb-1">Correo Electrónico</label>
                     <div class="relative">
                         <input type="email" id="email" name="email" placeholder="Ingrese su correo"
                             class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
@@ -30,7 +30,7 @@
 
                 <!-- contraseña -->
                 <div class="relative">
-                    <label class="block text-sm text-[#FF5252] mb-1">Contraseña</label>
+                    <label class="block text-sm text-gray-400 mb-1">Contraseña</label>
                     <div class="relative">
                         <input type="password" id="password" name="password" placeholder="Ingrese su contraseña"
                             class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-400 focus:outline-none">

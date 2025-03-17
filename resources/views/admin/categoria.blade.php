@@ -74,5 +74,6 @@
     </div>
 </dialog>
 
+<div id="pagination" class="join w-full justify-end mt-4"></div>
 
 @endsection

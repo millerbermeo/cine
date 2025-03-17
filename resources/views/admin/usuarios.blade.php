@@ -31,7 +31,7 @@
         class="table table-zebra overflow-hidden  text-left border-separate p-5 rounded-2xl bg-white">
         <thead class="bg-success text-sm text-white h-10">
             <tr>
-                <th class="px-0.5 m-0.5 pl-3">Id</th>
+                {{-- <th class="px-0.5 m-0.5 pl-3">Id</th> --}}
                 <th class="px-0.5 m-0.5 pl-3">Nombre</th>
                 <th class="px-0.5 m-0.5 pl-3">Apellido</th>
                 <th class="px-0.5 m-0.5 pl-3">Correo</th>
@@ -119,6 +119,10 @@
                         <option>Colombia</option>
                         <option>Brasil</option>
                         <option>Argentina</option>
+                        <option>Canada</option>
+                        <option>Chile</option>
+                        <option>Italia</option>
+                        <option>Rusia</option>
                     </select>
                     <span class="fieldset-label">Opcional</span>
                 </fieldset>

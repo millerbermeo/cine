@@ -55,7 +55,7 @@ const renderTable = () => {
         .map(
             (user) => `
         <tr>
-            <td>${user.id}</td>
+            <td class="hidden">${user.id}</td>
             <td>${user.nombre}</td>
             <td>${user.apellido}</td>
             <td>${user.email}</td>
