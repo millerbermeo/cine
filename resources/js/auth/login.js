@@ -28,7 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     if (!passwordInput.value.trim()) {
         passwordError.textContent = "La contraseña es requerida";
         isValid = false;
-    } else if (passwordInput.value.length < 6) {
+    } else if (passwordInput.value.length < 3) {
         passwordError.textContent = "La contraseña debe tener al menos 6 caracteres";
         isValid = false;
     }

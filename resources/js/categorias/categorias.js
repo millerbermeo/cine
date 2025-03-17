@@ -162,17 +162,52 @@ document.getElementById("submitFormCategoria").addEventListener("click", functio
     }
 });
 
+function mostrarModalEliminar(id) {
+    categoriaId = id;
+    document.getElementById("modal_eliminar_categoria").showModal();
+}
+
+// Evento para confirmar la eliminación
+document.getElementById("btn-confirmar-eliminar").addEventListener("click", function () {
+    fetch(`/delete-categorias/${categoriaId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+        },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error al eliminar la categoría");
+            }
+            return response.json();
+        })
+        .then(() => {
+            showToast("Categoría eliminada con éxito", "success");
+            listarCategorias();
+            document.getElementById("modal_eliminar_categoria").close();
+        })
+        .catch((error) => console.error("Error:", error));
+});
+
+// Evento para cerrar el modal
+document.getElementById("btn-cerrar-modal-eliminar").addEventListener("click", function () {
+    document.getElementById("modal_eliminar_categoria").close();
+});
+
+
 
 // ELIMINAR CATEGORÍA
-function mostrarModalEliminar(id) {
-    if (confirm("¿Estás seguro de eliminar esta categoría?")) {
-        fetch(`/delete-categorias/${id}`, {
-            method: "DELETE",
-        })
-            .then((response) => response.json())
-            .then(() => {
-                listarCategorias();
-            });
-    }
-}
+// function mostrarModalEliminar(id) {
+//     if (confirm("¿Estás seguro de eliminar esta categoría?")) {
+//         fetch(`/delete-categorias/${id}`, {
+//             method: "DELETE",
+//         })
+//             .then((response) => response.json())
+//             .then(() => {
+//                 listarCategorias();
+//             });
+//     }
+// }
+
 

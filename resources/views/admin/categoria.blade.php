@@ -62,4 +62,17 @@
         </div>
     </div>
 </dialog>
+
+<dialog id="modal_eliminar_categoria" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold text-center mb-5">Confirmar Eliminación</h3>
+        <p class="text-center">¿Estás seguro de que deseas eliminar esta categoría?</p>
+        <div class="modal-action flex justify-center">
+            <button id="btn-cerrar-modal-eliminar" class="btn btn-gray">Cancelar</button>
+            <button id="btn-confirmar-eliminar" class="btn btn-error text-white">Eliminar</button>
+        </div>
+    </div>
+</dialog>
+
+
 @endsection

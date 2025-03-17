@@ -4,6 +4,7 @@ import { formatFecha } from "../usuarios/format-date";
 
 document.addEventListener("DOMContentLoaded", function () {
     listarPeliculas();
+    listarCategoriasSelect()
 });
 
 // FUNCIONES PARA LOS MODALS
@@ -88,6 +89,7 @@ const renderTable = () => {
 
     renderPagination(filteredPeliculas.length);
 };
+
 
 function renderPagination(totalPeliculas) {
     const paginationContainer = document.getElementById("pagination");
@@ -260,3 +262,28 @@ document
             })
             .catch((error) => console.error("Error:", error));
     });
+
+
+//LISTAR CATEGORIA DE UN SLEECT
+
+function listarCategoriasSelect() {
+    fetch("/get-categorias")
+        .then((response) => response.json())
+        .then((data) => {
+            const selectCategoria = document.getElementById("categoria");
+
+            // Limpiar el select antes de agregar nuevas opciones
+            selectCategoria.innerHTML = '<option disabled selected>Selecciona una categoría</option>';
+
+            // Agregar nuevas opciones dinámicamente
+            data.forEach(categoria => {
+                const option = document.createElement("option");
+                option.value = categoria.nombre;  // ID de la categoría (opcional)
+                option.textContent = categoria.nombre; // Nombre de la categoría
+                selectCategoria.appendChild(option);
+            });
+        })
+        .catch((error) => console.error("Error al obtener categorías:", error));
+}
+
+

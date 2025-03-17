@@ -249,14 +249,13 @@ document.getElementById("submitForm").addEventListener("click", function () {
                 console.log("Usuario actualizado:", response.data);
                 showToast("Usuario actualizado con éxito", "success");
                 document.getElementById("id_modal_usuario").close();
+                limpiarFormulario();
                 listarUsuarios(); // Actualizar la lista de usuarios
             })
             .catch((error) => {
                 console.error("Error:", error);
                 showToast("No se pudo actualizar el usuario", "error");
             });
-
-        limpiarFormulario();
     } else {
         // Crear usuario
         axios
@@ -265,14 +264,21 @@ document.getElementById("submitForm").addEventListener("click", function () {
                 console.log("Usuario creado:", response.data);
                 showToast("Usuario creado con éxito", "success");
                 document.getElementById("id_modal_usuario").close();
+                limpiarFormulario();
                 listarUsuarios(); // Actualizar la lista de usuarios
             })
             .catch((error) => {
-                console.error("Error:", error);
-                showToast("No se pudo registrar el usuario", "error");
+                const mensajeError = error.response.data.message || "Ocurrió un error inesperado";
+        
+                // Si hay errores específicos (como email ya registrado)
+                if (error.response.data.errors) {
+                    const errores = error.response.data.errors;
+                    const detalles = Object.values(errores).flat().join(", "); // Convertir a texto legible
+                    showToast(`${mensajeError}: ${detalles}`, "error");
+                } else {
+                    showToast(mensajeError, "error");
+                }
             });
-
-        limpiarFormulario();
     }
 });
 
