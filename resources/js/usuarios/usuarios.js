@@ -235,7 +235,7 @@ document.getElementById("submitForm").addEventListener("click", function () {
         direccion: direccion,
         sexo: sexo,
         nacionalidad: nacionalidad,
-        foto: "path/to/photo.jpg",
+        foto: "photo.jpg",
         estado: "activo",
     };
 

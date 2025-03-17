@@ -4,6 +4,8 @@
 <div>
     <div class="flex flex-col gap-5 my-3">
 
+        <h1 class="text-3xl text-[#FF5252]">Listado de Peliculas</h1>
+
         <div id="peliculasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         <!-- Modal -->
         <dialog id="trailerModal" class="modal">
@@ -38,11 +40,11 @@
                 (pelicula) => `
                 <div class="card card-side bg-base-100 shadow-sm">
                     <figure>
-                        <img class="h-[150px] w-[120px] bg-white object-cover" src="storage/${pelicula.foto}" alt="${pelicula.nombre}" />
+                        <img class="h-[150px] ${pelicula.foto ? '' : 'hidden'} w-[120px] bg-white object-cover" src="storage/${pelicula.foto}" />
                     </figure>
                     <div class="card-body">
-                        <h2 class="card-title">${pelicula.nombre}</h2>
-                        <p>${pelicula.descripcion}</p>
+                        <h2 class="card-title uppercase">${pelicula.nombre}</h2>
+                        <p class="text-[#FF5252]">${pelicula.descripcion}</p>
                         <p class="hidden">${pelicula.trailer_url}</p>
                         <div class="card-actions  justify-end">
                             <button class="btn text-white btn-success btntrailer" data-id="${pelicula.id}" data-nombre="${pelicula.nombre}" data-descripcion="${pelicula.descripcion}" data-categoria="${pelicula.categoria}" data-year="${pelicula.year}" data-foto="storage/${pelicula.foto}" data-trailer-url="${pelicula.trailer_url}">Ver más</button>

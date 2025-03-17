@@ -13,10 +13,10 @@ export const limpiarFormulario = () => {
 };
 
 export const limpiarFormularioPeliculas = () => {
-    document.getElementById("nombre").value = "";         // Título de la película
-    document.getElementById("descripcion").value = "";    // Descripción (director)
-    document.getElementById("categoria").value = "";      // Género
-    document.getElementById("year").value = "";           // Año de estreno
-    document.getElementById("trailer_url").value = "";    // URL del trailer
-    document.getElementById("foto").value = "";           // Foto de la película
+    document.getElementById("nombre").value = "";
+    document.getElementById("descripcion").value = "";
+    document.getElementById("categoria").value = "";
+    document.getElementById("year").value = "";
+    document.getElementById("trailer_url").value = "";
+    document.getElementById("foto").value = "";
 };

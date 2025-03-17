@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="bg-gray-900 text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
-    <a href="#" class="text-white font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
+<div class="bg-gray-900 text-[#FF5252] flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
+    <a href="#" class="font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
         <i class="fa-solid fa-user-circle text-3xl"></i>
         Net Pelix
     </a>
@@ -19,33 +19,33 @@
                 @csrf
                 <!-- correo -->
                 <div class="relative">
-                    <label class="block text-sm text-gray-400 mb-1">Correo Electrónico</label>
+                    <label class="block text-sm text-[#FF5252] mb-1">Correo Electrónico</label>
                     <div class="relative">
                         <input type="email" id="email" name="email" placeholder="Ingrese su correo"
-                            class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                            class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                         <i class="fa-solid fa-envelope absolute right-4 top-3 text-gray-400"></i>
                     </div>
-                    <span class="email-campo m-1 mt-2 text-red-500"></span>
+                    <span class="email-campo m-1 mt-2 text-white"></span>
                 </div>
 
                 <!-- contraseña -->
                 <div class="relative">
-                    <label class="block text-sm text-gray-400 mb-1">Contraseña</label>
+                    <label class="block text-sm text-[#FF5252] mb-1">Contraseña</label>
                     <div class="relative">
                         <input type="password" id="password" name="password" placeholder="Ingrese su contraseña"
                             class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-400 focus:outline-none">
                         <i class="fa-solid fa-lock absolute right-4 top-3 text-gray-400"></i>
                     </div>
-                    <span class="password-campo m-1 mt-2 text-red-500"></span>
+                    <span class="password-campo m-1 mt-2 text-white"></span>
                 </div>
 
                 <div class="flex justify-between">
                     <button type="button" onclick="id_auth_usuario.showModal()"
-                        class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white hover:bg-gray-600 transition">
+                        class="px-4 py-2 bg-gray-700 border border-gray-600 cursor-pointer rounded-lg text-white hover:bg-gray-600 transition">
                         <i class="fa-solid fa-user-plus"></i> Registrarse
                     </button>
                     <button type="submit"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        class="px-4 py-2 bg-[#FF5252] text-white rounded-lg cursor-pointer hover:bg-blue-600 transition">
                         <i class="fa-solid fa-sign-in-alt"></i> Iniciar sesión
                     </button>
                 </div>

@@ -1,5 +1,5 @@
 export const formatFecha = (fecha) => {
-    // Crear un objeto Date a partir de la fecha en formato ISO 8601
+
     const dateObj = new Date(fecha);
     
     // Obtener los componentes de la fecha

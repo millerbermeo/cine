@@ -17,6 +17,7 @@ function openModal() {
 
 function closeModal() {
     document.getElementById("id_modal_categoria").close();
+    document.getElementById("nombre").value = ''
 }
 
 btnOpenModal.addEventListener("click", openModal);
@@ -140,6 +141,7 @@ document.getElementById("submitFormCategoria").addEventListener("click", functio
             .then((response) => {
                 showToast("Categoría actualizada con éxito", "success");
                 listarCategorias();
+                document.getElementById("nombre").value = ''
                 closeModal();
             })
             .catch((error) => {
@@ -153,6 +155,7 @@ document.getElementById("submitFormCategoria").addEventListener("click", functio
             .then((response) => {
                 showToast("Categoría creada con éxito", "success");
                 listarCategorias();
+                document.getElementById("nombre").value = ''
                 closeModal();
             })
             .catch((error) => {
@@ -190,24 +193,11 @@ document.getElementById("btn-confirmar-eliminar").addEventListener("click", func
         .catch((error) => console.error("Error:", error));
 });
 
-// Evento para cerrar el modal
+
 document.getElementById("btn-cerrar-modal-eliminar").addEventListener("click", function () {
     document.getElementById("modal_eliminar_categoria").close();
 });
 
 
-
-// ELIMINAR CATEGORÍA
-// function mostrarModalEliminar(id) {
-//     if (confirm("¿Estás seguro de eliminar esta categoría?")) {
-//         fetch(`/delete-categorias/${id}`, {
-//             method: "DELETE",
-//         })
-//             .then((response) => response.json())
-//             .then(() => {
-//                 listarCategorias();
-//             });
-//     }
-// }
 
 
