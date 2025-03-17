@@ -31,20 +31,20 @@
         class="table table-zebra overflow-hidden  text-left border-separate p-5 rounded-2xl bg-white">
         <thead class="bg-success text-sm text-white h-10">
             <tr>
-                <th class="">Id</th>
-                <th class="">Nombre</th>
-                <th class="">Apellido</th>
-                <th class="">Correo</th>
-                <th class="">Identificación</th>
-                <th class="">Edad</th>
-                <th class="">Teléfono</th>
-                <th class="">Dirección</th>
-                <th class="">Sexo</th>
-                <th class=" hidden">Foto</th>
-                <th class=" hidden">Estado</th>
-                <th class="">Nacionalidad</th>
-                <th class=" hidden">Fecha</th>
-                <th class="">Acciones</th>
+                <th class="px-0.5 m-0.5 pl-3">Id</th>
+                <th class="px-0.5 m-0.5 pl-3">Nombre</th>
+                <th class="px-0.5 m-0.5 pl-3">Apellido</th>
+                <th class="px-0.5 m-0.5 pl-3">Correo</th>
+                <th class="px-0.5 m-0.5 pl-3">Identificación</th>
+                <th class="px-0.5 m-0.5 pl-3">Edad</th>
+                <th class="px-0.5 m-0.5 pl-3">Teléfono</th>
+                <th class="px-0.5 m-0.5 pl-3">Dirección</th>
+                <th class="px-0.5 m-0.5 pl-3">Sexo</th>
+                <th class="px-0.5 m-0.5 pl-3 hidden">Foto</th>
+                <th class="px-0.5 m-0.5 pl-3 hidden">Estado</th>
+                <th class="px-0.5 m-0.5 pl-3">Nacionalidad</th>
+                <th class="px-0.5 m-0.5 pl-3 hidden">Fecha</th>
+                <th class="px-0.5 m-0.5 pl-3">Acciones</th>
             </tr>
         </thead>
         <tbody id="userData"></tbody>
