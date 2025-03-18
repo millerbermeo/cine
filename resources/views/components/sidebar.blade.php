@@ -5,9 +5,9 @@
 
 <div id="sidebar"
     class="w-[240px] min-w-[240px] h-screen border-r-1 border-gray-300 shadow-md bg-[#ffffff] transform -translate-x-full transition-transform duration-300 sm:translate-x-0">
-    <div class="flex items-center gap-3 py-4 px-5 bg-[#FDF2F2]">
+    <div class="flex items-center gap-3 py-4 px-5 bg-success">
         <img class="w-10 h-10 rounded-full bg-[#FF5252]" src="{{ asset('images/logo.png') }}" alt="Logo">
-        <span class="text-2xl font-semibold text-[#FF5252]">Net Pelis</span>
+        <span class="text-2xl font-semibold text-[#ffffff]">Net Pelis</span>
         <button id="closeSidebar" class="sm:hidden text-gray-600 hover:text-gray-800 ml-auto">✕</button>
     </div>
     <nav class="p-4">
@@ -52,10 +52,6 @@
 
 
             <div class="modal-action">
-                {{-- <form method="dialog">
-                    <!-- if there is a button in form, it will close the modal -->
-                    <button class="btn btn-info">Cancelar</button>
-                </form> --}}
                 <div class="modal-action m-0 p-0">
                     <button id="logoutsession" class="btn btn-success">Cerrar Session</button>
                 </div>

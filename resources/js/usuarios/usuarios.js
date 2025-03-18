@@ -1,4 +1,5 @@
 import { showToast } from "../toast";
+import { validarCampo } from "../validar-inputs";
 import { limpiarFormulario } from "./clean-form";
 import { formatFecha } from "./format-date";
 
@@ -186,39 +187,22 @@ document.getElementById("submitForm").addEventListener("click", function () {
     const password = document.getElementById("password").value;
 
     // Expresiones regulares para validaciones
-    const regexNombreApellido = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/; // Solo letras y espacios
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Formato email
-    const regexTelefono = /^[0-9]{7,15}$/; // Solo números, entre 7 y 15 dígitos
-    const regexEdad = /^[0-9]{1,3}$/; // Solo números hasta 3 dígitos
+    const regexNombreApellido = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regexTelefono = /^[0-9]{7,10}$/;
+    const regexEdad = /^[0-9]{1,3}$/;
 
-    if (!nombre || !identificacion || !email) {
-        showToast("Por favor, complete los campos obligatorios.", "error");
-        return;
-    }
+    let isValid = true;
 
-    // Validaciones
-    if (!nombre || !regexNombreApellido.test(nombre)) {
-        showToast("El nombre solo puede contener letras y espacios", "error");
-        return;
-    }
-    if (!apellido || !regexNombreApellido.test(apellido)) {
-        showToast("El apellido solo puede contener letras y espacios", "error");
-        return;
-    }
-    if (!identificacion) {
-        showToast("El campo Identificación es obligatorio", "error");
-        return;
-    }
-    if (!email || !regexEmail.test(email)) {
-        showToast("Ingrese un correo válido", "error");
-        return;
-    }
-    if (!telefono || !regexTelefono.test(telefono)) {
-        showToast("El teléfono debe contener entre 7 y 15 dígitos", "error");
-        return;
-    }
-    if (!edad || !regexEdad.test(edad) || edad < 0 || edad > 120) {
-        showToast("Ingrese una edad válida (entre 0 y 120)", "error");
+    // Validaciones usando la función modular
+    isValid &= validarCampo("nombre", "nombreError", "El nombre es obligatorio y solo puede contener letras y espacios.") && regexNombreApellido.test(nombre);
+    isValid &= validarCampo("apellido", "apellidoError", "El apellido es obligatorio y solo puede contener letras y espacios.") && regexNombreApellido.test(apellido);
+    isValid &= validarCampo("identificacion", "identificacionError", "El campo Identificación es obligatorio.");
+    isValid &= validarCampo("email", "emailError", "Ingrese un correo válido.") && regexEmail.test(email);
+    isValid &= validarCampo("telefono", "telefonoError", "El teléfono debe contener entre 7 y 10 dígitos.") && regexTelefono.test(telefono);
+    isValid &= validarCampo("edad", "edadError", "Ingrese una edad válida (entre 0 y 120).") && regexEdad.test(edad) && edad >= 0 && edad <= 120;
+
+    if (!isValid) {
         return;
     }
 

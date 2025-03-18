@@ -1,10 +1,11 @@
 import { showToast } from "../toast";
 import { limpiarFormularioPeliculas } from "../usuarios/clean-form";
 import { formatFecha } from "../usuarios/format-date";
+import { limpiarValidaciones, validarCampo } from "../validar-inputs";
 
 document.addEventListener("DOMContentLoaded", function () {
     listarPeliculas();
-    listarCategoriasSelect()
+    listarCategoriasSelect();
 });
 
 // FUNCIONES PARA LOS MODALS
@@ -24,7 +25,13 @@ function openModal() {
 }
 
 function closeModal() {
-    id_modal_pelicula.close(); // Cierra el modal
+    limpiarValidaciones([
+        { idInput: "nombre", idError: "nombreError" },
+        { idInput: "descripcion", idError: "descripcionError" },
+        { idInput: "categoria", idError: "CategoriaError", errorClass: "select-error" },
+        { idInput: "year", idError: "YearError" }
+    ]);
+    id_modal_pelicula.close();
 }
 
 btnOpenModal.addEventListener("click", (e) => {
@@ -89,7 +96,6 @@ const renderTable = () => {
 
     renderPagination(filteredPeliculas.length);
 };
-
 
 function renderPagination(totalPeliculas) {
     const paginationContainer = document.getElementById("pagination");
@@ -167,88 +173,82 @@ const obtenerPelicula = (id) => {
 };
 
 
+
 document.getElementById("submitFormPeli").addEventListener("click", function () {
-        const peliculaId = document.getElementById("peliculaId").value;
-        const titulo = document.getElementById("nombre").value;
-        const director = document.getElementById("descripcion").value;
-        const genero = document.getElementById("categoria").value;
-        const fechaEstreno = document.getElementById("year").value;
-        const trailer_url = document.getElementById("trailer_url").value;
+    const peliculaId = document.getElementById("peliculaId").value;
+    const trailer_url = document.getElementById("trailer_url").value;
+    const fotoInput = document.getElementById("foto");
 
-        if (!titulo || !genero) {
-            showToast("Por favor, complete los campos obligatorios.", "error");
-            return;
-        }
+    // Validaciones
+    const esNombreValido = validarCampo("nombre", "nombreError", "El nombre es requerido.");
+    const esDescripcionValida = validarCampo("descripcion", "descripcionError", "La descripción es requerida.");
+    const esCategoriaValida = validarCampo("categoria", "CategoriaError", "La categoría es requerida.", "select-error");
+    const esFechaEstrenoValida = validarCampo("year", "YearError", "El año es requerido.");
 
-        if (!/^\d{4}$/.test(fechaEstreno)) {
-            showToast("Ingrese un Año Válido", "error");
-            return;
-        }
+    // Validación adicional para el año (solo 4 dígitos)
+    const fechaEstreno = document.getElementById("year").value.trim();
+    if (esFechaEstrenoValida && !/^\d{4}$/.test(fechaEstreno)) {
+        document.getElementById("YearError").textContent = "El año ingresado no es válido.";
+        return;
+    }
 
-        const peliculaData = {
-            nombre: titulo,
-            descripcion: director,
-            categoria: genero,
-            year: fechaEstreno,
-            trailer_url: trailer_url,
-        };
+    // Detener el proceso si hay errores
+    if (!esNombreValido || !esDescripcionValida || !esCategoriaValida || !esFechaEstrenoValida) {
+        return;
+    }
+
+    limpiarValidaciones([
+        { idInput: "nombre", idError: "nombreError" },
+        { idInput: "descripcion", idError: "descripcionError" },
+        { idInput: "categoria", idError: "CategoriaError", errorClass: "select-error" },
+        { idInput: "year", idError: "YearError" }
+    ]);
     
-        const fotoInput = document.getElementById("foto");
 
-        if (fotoInput.files.length > 0) {
-            peliculaData.foto = fotoInput.files[0]; // Agregar la foto si se seleccionó
-        }
+    const peliculaData = {
+        nombre: document.getElementById("nombre").value.trim(),
+        descripcion: document.getElementById("descripcion").value.trim(),
+        categoria: document.getElementById("categoria").value.trim(),
+        year: fechaEstreno,
+        trailer_url: trailer_url.trim(),
+    };
 
-        const formData = new FormData();
-        formData.append("nombre", titulo);
-        formData.append("descripcion", director);
-        formData.append("categoria", genero);
-        formData.append("year", fechaEstreno);
-        formData.append("trailer_url", trailer_url);
+    const formData = new FormData();
+    for (const key in peliculaData) {
+        formData.append(key, peliculaData[key]);
+    }
 
-        if (fotoInput.files.length > 0) {
-            formData.append("foto", fotoInput.files[0]); // Agregar la foto si se seleccionó
-        }
+    if (fotoInput.files.length > 0) {
+        formData.append("foto", fotoInput.files[0]); // Agregar la foto si se seleccionó
+    }
 
-        if (peliculaId) {
-            peliculaData.id = peliculaId; // Incluir el ID de la película para la actualización
-            console.log('Datos para actualizar:', peliculaData);
-    
-            axios.put(`/put-peliculas/${peliculaId}`, peliculaData, {
-                headers: {
-                    "Content-Type": "application/json", // Enviar como JSON
-                },
-            })
-            .then((response) => {
-                showToast("Película actualizada con éxito", "success");
-                document.getElementById("id_modal_pelicula").close();
-                listarPeliculas();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                showToast("No se pudo actualizar la película", "error");
-            });
-            document.getElementById("peliculaId").value = ""
-            limpiarFormularioPeliculas();
-        } else {
-            axios
-                .post("/post-peliculas", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data", // Asegurarse de que sea FormData
-                    },
-                })
-                .then((response) => {
-                    showToast("Película creada con éxito", "success");
-                    document.getElementById("id_modal_pelicula").close();
-                    listarPeliculas();
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    showToast("No se pudo registrar la película", "error");
-                });
-                limpiarFormularioPeliculas()
-        }
-    });
+    if (peliculaId) {
+        // Actualizar película
+        axios.put(`/put-peliculas/${peliculaId}`, peliculaData, {
+            headers: { "Content-Type": "application/json" }
+        }).then(() => {
+            showToast("Película actualizada con éxito", "success");
+            document.getElementById("id_modal_pelicula").close();
+            listarPeliculas();
+        }).catch(() => {
+            showToast("No se pudo actualizar la película", "error");
+        });
+    } else {
+        // Crear nueva película
+        axios.post("/post-peliculas", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        }).then(() => {
+            showToast("Película creada con éxito", "success");
+            document.getElementById("id_modal_pelicula").close();
+            listarPeliculas();
+        }).catch(() => {
+            showToast("No se pudo registrar la película", "error");
+        });
+    }
+
+    limpiarFormularioPeliculas();
+});
+
 
 // FUNCION PARA ELIMINAR UNA PELICULA
 document
@@ -277,7 +277,6 @@ document
             .catch((error) => console.error("Error:", error));
     });
 
-
 //LISTAR CATEGORIA DE UN SLEECT
 
 function listarCategoriasSelect() {
@@ -287,17 +286,16 @@ function listarCategoriasSelect() {
             const selectCategoria = document.getElementById("categoria");
 
             // Limpiar el select antes de agregar nuevas opciones
-            selectCategoria.innerHTML = '<option disabled selected>Selecciona una categoría</option>';
+            selectCategoria.innerHTML =
+                "<option disabled selected>Selecciona una categoría</option>";
 
             // Agregar nuevas opciones dinámicamente
-            data.forEach(categoria => {
+            data.forEach((categoria) => {
                 const option = document.createElement("option");
-                option.value = categoria.nombre;  // ID de la categoría (opcional)
+                option.value = categoria.nombre; // ID de la categoría (opcional)
                 option.textContent = categoria.nombre; // Nombre de la categoría
                 selectCategoria.appendChild(option);
             });
         })
         .catch((error) => console.error("Error al obtener categorías:", error));
 }
-
-

@@ -11,13 +11,26 @@ class PeliculaController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function index(Request $request)
+    {
+        // Determinamos el número de elementos por página
+        $perPage = 10;
     
-    public function index()
+        // Recuperamos las películas de 20 en 20, ordenadas por la fecha de creación
+        $peliculas = Pelicula::orderBy('created_at', 'desc')->paginate($perPage);
+    
+        // Retornamos las películas como respuesta JSON, incluyendo la información de paginación
+        return response()->json($peliculas);
+    }
+    
+    public function index2()
     {
         $users = Pelicula::orderBy('created_at', 'desc')->get();
 
         return response()->json( $users);
     }
+    
 
     public function store(Request $request)
     {

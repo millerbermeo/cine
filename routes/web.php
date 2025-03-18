@@ -74,4 +74,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-categorias/{id}', [CategoriaController::class, 'show']); // Obtener una categoría por ID
     Route::put('/put-categorias/{id}', [CategoriaController::class, 'update']); // Actualizar una categoría
     Route::delete('/delete-categorias/{id}', [CategoriaController::class, 'destroy']); // Eliminar una categoría
+    Route::patch('/categoria/{id}/estado', [CategoriaController::class, 'updateStatus'])->name('categoria.updateStatus');
+
 });

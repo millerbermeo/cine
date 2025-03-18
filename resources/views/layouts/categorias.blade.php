@@ -20,10 +20,8 @@ session_start();
 <body>
 
     <div class="flex w-full bg-[#F0F3F5] overflow-hidden items-start">
-        <div>
-            <x-sidebar />
-        </div>
-        <div class="flex flex-col w-full h-screen overflow-y-auto">
+        <x-sidebar />
+        <div class="flex flex-col w-full">
             <x-navbar />
             <div class="mx-5">
                 @yield('content')
@@ -31,7 +29,7 @@ session_start();
         </div>
     </div>
 
-    @vite('resources/js/usuarios/usuarios.js')
+    @vite('resources/js/categorias/categorias.js')
 </body>
 
 </html>

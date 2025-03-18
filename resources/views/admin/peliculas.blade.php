@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.peliculas')
 
 @section('content')
 <div class="flex justify-between items-center mb-2">
@@ -55,13 +55,13 @@
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Nombre</legend>
                     <input id="nombre" type="text" class="input" placeholder="Nombre" />
-                    <p class="fieldset-label">Obligatorio</p>
+                    <p class="fieldset-label" id="nombreError">Obligatorio</p>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Descripción</legend>
                     <input id="descripcion" type="text" class="input" placeholder="Descripción" />
-                    <p class="fieldset-label">Opcional</p>
+                    <p class="fieldset-label" id="descripcionError">Obligatorio</p>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">
@@ -74,7 +74,7 @@
                         <option>Drama</option>
                         <option>Romántica</option>
                     </select>
-                    <p class="fieldset-label">Opcional</p>
+                    <p class="fieldset-label" id="CategoriaError">Obligatorio</p>
                 </fieldset>
             </div>
 
@@ -82,7 +82,7 @@
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Año</legend>
                     <input id="year" type="text" class="input" placeholder="Año" />
-                    <p class="fieldset-label">Obligatorio</p>
+                    <p class="fieldset-label" id="YearError">Obligatorio</p>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">

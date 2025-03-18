@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.categorias')
 
 @section('content')
 <div class="flex justify-between items-center mb-2">
@@ -34,8 +34,9 @@
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Fecha de Registro</th>
+                {{-- <th>Eliminar</th> --}}
+                <th>Estado</th>
                 <th>Editar</th>
-                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody id="categoriaData"></tbody>
@@ -50,8 +51,9 @@
             <div class="w-full flex justify-between">
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Nombre</legend>
-                    <input id="nombre" type="text" class="input w-full" placeholder="Nombre" />
+                    <input class="input w-full" id="nombre" type="text" class="input w-full" placeholder="Nombre" />
                     <p class="text-red-500" id="errorNombre"></p>
+                    <p class="text-red-500" id="ErrorCategoriaDuplicada"></p>
                 </fieldset>
             </div>
         </div>

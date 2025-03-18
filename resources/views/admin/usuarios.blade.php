@@ -60,19 +60,19 @@
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Nombre</legend>
                     <input id="nombre" type="text" class="input" placeholder="Nombre" />
-                    <p class="fieldset-label">Obligatorio</p>
+                    <p class="fieldset-label" id="nombreError">Obligatorio</p>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Apellido</legend>
                     <input id="apellido" type="text" class="input" placeholder="Apellido" />
-                    <p class="fieldset-label">Opcional</p>
+                    <p class="fieldset-label" id="apellidoError">Obligatorio</p>
                 </fieldset>
 
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Identificacion</legend>
                     <input id="identificacion" type="text" class="input" placeholder="Identificacion" />
-                    <p class="fieldset-label">Obligatorio</p>
+                    <p class="fieldset-label" id="identificacionError">Obligatorio</p>
                 </fieldset>
             </div>
 
@@ -80,17 +80,17 @@
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Email</legend>
                     <input id="email" type="text" class="input" placeholder="Email" />
-                    <p class="fieldset-label">Obligatorio</p>
+                    <p class="fieldset-label" id="emailError">Obligatorio</p>
                 </fieldset>
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Telefono</legend>
                     <input id="telefono" type="text" class="input" placeholder="Telefono" />
-                    <p class="fieldset-label">Opcional</p>
+                    <p class="fieldset-label" id="telefonoError">Obligatorio</p>
                 </fieldset>
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Edad</legend>
                     <input id="edad" type="text" class="input" placeholder="Edad" />
-                    <p class="fieldset-label">Opcional</p>
+                    <p class="fieldset-label" id="edadError">Obligatorio</p>
                 </fieldset>
             </div>
 

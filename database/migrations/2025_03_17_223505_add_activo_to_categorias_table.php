@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->boolean('activo')->default(true); // Agrega el campo "activo" con valor por defecto true
-            $table->timestamps();
+        Schema::table('categorias', function (Blueprint $table) {
+            $table->boolean('estado')->default(true); // Por defecto, estará activo (true)
+
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::table('categorias', function (Blueprint $table) {
+            $table->dropColumn('estado');
+        });
     }
 };
