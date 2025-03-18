@@ -58,14 +58,14 @@ const renderTable = () => {
         <tr>
             <td class="hidden">${user.id}</td>
             <td>${user.nombre}</td>
-            <td>${user.apellido}</td>
+            <td>${user.apellido ?? ''}</td>
             <td>${user.email}</td>
-            <td>${user.identificacion}</td>
-            <td>${user.edad}</td>
-            <td>${user.telefono}</td>
-            <td>${user.direccion}</td>
-            <td>${user.sexo}</td>
-            <td>${user.nacionalidad}</td>
+            <td>${user.identificacion ?? ''}</td>
+            <td>${user.edad ?? ''}</td>
+            <td>${user.telefono ?? ''}</td>
+            <td>${user.direccion ?? ''}</td>
+            <td>${user.sexo ?? ''}</td>
+            <td>${user.nacionalidad ?? ''}</td>
             <td class="flex gap-2"><button type="button" class="btn-abrir btn  flex rounded-4xl btn-info text-sm text-white" data-user-id="${user.id}">Editar</button>
                  <button  class="btn  flex   btn-error rounded-4xl text-sm text-white btn-eliminar-m" data-user-id-delete="${user.id}">Eliminar</button>
             </td>

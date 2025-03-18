@@ -290,7 +290,7 @@ function listarCategoriasSelect() {
                 "<option disabled selected>Selecciona una categoría</option>";
 
             // Agregar nuevas opciones dinámicamente
-            data.forEach((categoria) => {
+            data.filter((categoria) => categoria.estado == 1).forEach((categoria) => {
                 const option = document.createElement("option");
                 option.value = categoria.nombre; // ID de la categoría (opcional)
                 option.textContent = categoria.nombre; // Nombre de la categoría

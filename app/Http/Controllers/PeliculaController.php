@@ -15,7 +15,7 @@ class PeliculaController extends Controller
     public function index(Request $request)
     {
         // Determinamos el número de elementos por página
-        $perPage = 10;
+        $perPage = 20;
     
         // Recuperamos las películas de 20 en 20, ordenadas por la fecha de creación
         $peliculas = Pelicula::orderBy('created_at', 'desc')->paginate($perPage);

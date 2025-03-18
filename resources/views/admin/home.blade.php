@@ -4,16 +4,27 @@
 <div>
     <div class="flex flex-col gap-5 my-3">
 
-       <div class="top-0 sticky z-30 bg-white p-3 mb-2 rounded">
-       <div class="flex justify-between items-end ">
-        <h1 class="text-2xl text-success">Listado de Peliculas</h1>
-        <input type="text" id="searchInput" class="input input-bordered w-full max-w-xs" placeholder="Buscar nombre, categoria, descripcion, año..."  />
-       </div>
-       <div class="w-full h-[1px] bg-success mt-2"></div>
-       </div>
-        
+        <div class="top-0 sticky z-30 bg-white p-3 mb-2 rounded">
+            <div class="flex justify-between items-end ">
 
-        <div id="peliculasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 px-0.5"></div>
+                <h1 class="text-2xl text-success">Listado de Peliculas</h1>
+                <div class="flex justify-center gap-3">
+                    <input type="text" id="fecha1" placeholder="Fecha 1" class="input" />
+                    <input type="text" id="fecha2" placeholder="Fecha 2" class="input" />
+                    <input type="text" id="searchInput" class="input input-bordered min-w-80"
+                        placeholder="Buscar nombre, categoria, descripcion, año..." />
+                    <div>
+                        <button class="btn btn-info text-white">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full h-[1px] bg-success mt-2"></div>
+        </div>
+
+
+        <div id="peliculasContainer"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 px-0.5"></div>
 
         <!-- Modal -->
         <dialog id="trailerModal" class="modal">
@@ -30,10 +41,11 @@
         <div class="flex justify-center mt-5 fixed bottom-10 left-0 right-0">
             <button id="loadMoreBtn" class="btn btn-success btn-circle scale-150 text-white">Más</button>
         </div>
-        
+
         <div id="loader" class="flex justify-center items-center fixed bottom-10 right-10">
-            <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-t-transparent border-success" role="status">
-              
+            <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-t-transparent border-success"
+                role="status">
+
             </div>
         </div>
     </div>
@@ -58,10 +70,15 @@
             
             allPeliculas = [...allPeliculas, ...peliculas.data]; // Guardamos todas las películas cargadas
             updatePeliculas(allPeliculas); 
+            const container = document.getElementById('peliculasContainer'); 
+            const lastElement = container.lastElementChild; 
+            if (lastElement) {
+                lastElement.scrollIntoView({ behavior: 'smooth' }); 
+            }
 
             if (!peliculas.next_page_url) {
                 loadMoreBtn.disabled = true;
-                loadMoreBtn.textContent = 'No hay más películas';
+                loadMoreBtn.textContent = 'Fin';
             }
         } catch (error) {
             console.error("Error al obtener las películas:", error);
