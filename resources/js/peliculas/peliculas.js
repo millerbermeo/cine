@@ -1,6 +1,6 @@
 import { showToast } from "../toast";
 import { limpiarFormularioPeliculas } from "../usuarios/clean-form";
-import { formatFecha } from "../usuarios/format-date";
+// import { formatFecha } from "../usuarios/format-date";
 import { limpiarValidaciones, validarCampo } from "../validar-inputs";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -55,7 +55,10 @@ const renderTable = () => {
         .value.toLowerCase();
 
     const filteredPeliculas = peliculas.filter((pelicula) =>
-        pelicula.nombre.toLowerCase().includes(searchValue)
+        pelicula.nombre.toLowerCase().includes(searchValue) ||
+        pelicula.descripcion.toLowerCase().includes(searchValue) ||
+        pelicula.categoria.toLowerCase().includes(searchValue)||
+        pelicula.year.toLowerCase().includes(searchValue)
     );
 
     const start = (currentPage - 1) * limit;
@@ -99,11 +102,23 @@ const renderTable = () => {
 
 function renderPagination(totalPeliculas) {
     const paginationContainer = document.getElementById("pagination");
-    paginationContainer.innerHTML = "";
+    paginationContainer.innerHTML = ""; // Limpiar el contenedor
 
     const totalPages = Math.ceil(totalPeliculas / limit);
 
-    if (totalPages <= 1) return;
+    if (totalPages <= 1) return; // Si solo hay una página no mostrar paginación
+
+    const prevButton = document.createElement("button");
+    prevButton.className = "btn btn-square";
+    prevButton.textContent = "←";
+    prevButton.disabled = currentPage === 1; // Desactivar si es la primera página
+    prevButton.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            listarPeliculas(); // Llamar a la función para obtener los datos de la página anterior
+        }
+    });
+    paginationContainer.appendChild(prevButton);
 
     for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement("input");
@@ -119,12 +134,26 @@ function renderPagination(totalPeliculas) {
 
         button.addEventListener("change", function () {
             currentPage = parseInt(this.value);
-            renderTable();
+            listarPeliculas();
         });
 
         paginationContainer.appendChild(button);
     }
+
+    const nextButton = document.createElement("button");
+    nextButton.className = "btn btn-square";
+    nextButton.textContent = "→";
+    nextButton.disabled = currentPage === totalPages; // Desactivar si es la última página
+    nextButton.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            listarPeliculas(); // Llamar a la función para obtener los datos de la página siguiente
+        }
+    });
+    paginationContainer.appendChild(nextButton);
 }
+
+
 
 document.getElementById("searchInput").addEventListener("input", () => {
     currentPage = 1;
@@ -139,10 +168,14 @@ document.getElementById("limitSelect").addEventListener("change", (e) => {
 
 // FUNCION QUE LISTA LAS PELICULAS
 const listarPeliculas = () => {
-    fetch("/get-peliculas")
+    // Se obtiene la página y el límite
+    const currentPage = document.getElementById("pagination").querySelector('input:checked')?.value || 1;
+    const limit = parseInt(document.getElementById("limitSelect").value);
+
+    fetch(`/get-peliculas?page=${currentPage}&limit=${limit}`)
         .then((response) => response.json())
         .then((data) => {
-            peliculas = data;
+            peliculas = data.data; // Para obtener las películas paginadas
             renderTable();
         })
         .catch((error) =>

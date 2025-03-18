@@ -38,7 +38,8 @@ const renderTable = () => {
         .getElementById("searchInput")
         .value.toLowerCase();
     const filteredCategorias = categorias.filter((categoria) =>
-        categoria.nombre.toLowerCase().includes(searchValue)
+        categoria.nombre.toLowerCase().includes(searchValue) ||
+        categoria.estado.toLowerCase().includes(searchValue)
     );
 
     const start = (currentPage - 1) * limit;

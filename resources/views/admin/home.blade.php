@@ -11,15 +11,16 @@
                 <div class="flex justify-center gap-3">
                     <div class="relative">
                         <input type="text" id="fecha1" placeholder="Fecha 1" class="input max-w-24" />
-                    <input type="text" id="fecha2" placeholder="Fecha 2" class="input max-w-24" />
-                    <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
+                        <input type="text" id="fecha2" placeholder="Fecha 2" class="input max-w-24" />
+                        <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
                     </div>
-                    
+
                     <input type="text" id="searchInput" class="input input-bordered min-w-80"
                         placeholder="Buscar nombre, categoria, descripcion, año..." />
-                        <div>
-                            <button id="BtnExcell" class="btn btn-success">Excell</button>
-                        </div>
+                    <div>
+                        <button id="BtnExcell" class="btn btn-success"><i class="fas fa-download"></i>
+                            Excell</button>
+                    </div>
                     <div>
                         <button id="BtnClear" class="btn btn-warning">Limpiar</button>
                     </div>
@@ -74,13 +75,13 @@
 
             const response = await fetch(`/get-peliculas?page=${page}`);
             const peliculas = await response.json();
-            
+
             allPeliculas = [...allPeliculas, ...peliculas.data]; // Guardamos todas las películas cargadas
-            updatePeliculas(allPeliculas); 
-            const container = document.getElementById('peliculasContainer'); 
-            const lastElement = container.lastElementChild; 
+            updatePeliculas(allPeliculas);
+            const container = document.getElementById('peliculasContainer');
+            const lastElement = container.lastElementChild;
             if (lastElement) {
-                lastElement.scrollIntoView({ behavior: 'smooth' }); 
+                lastElement.scrollIntoView({ behavior: 'smooth' });
             }
 
             if (!peliculas.next_page_url) {
@@ -99,12 +100,12 @@
 
 
         const searchTerm = event.target.value.toLowerCase();
-        const filteredPeliculas = allPeliculas.filter(pelicula => 
+        const filteredPeliculas = allPeliculas.filter(pelicula =>
             pelicula.nombre.toLowerCase().includes(searchTerm) ||
             pelicula.categoria.toLowerCase().includes(searchTerm)||
             pelicula.descripcion.toLowerCase().includes(searchTerm)||
             pelicula.year.toLowerCase().includes(searchTerm)
-            
+
         );
         updatePeliculas(filteredPeliculas);
     });
@@ -126,7 +127,7 @@
         `).join("");
     }
 
-   
+
 
     // Cargar más películas
     loadMoreBtn.addEventListener("click", () => {
@@ -161,6 +162,6 @@
         });
 
 
-  
+
     });
 </script> --}}

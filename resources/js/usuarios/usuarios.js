@@ -46,7 +46,13 @@ const renderTable = () => {
         (user) =>
             user.nombre.toLowerCase().includes(searchValue) ||
             user.apellido.toLowerCase().includes(searchValue) ||
-            user.email.toLowerCase().includes(searchValue)
+            user.email.toLowerCase().includes(searchValue) ||
+            user.identificacion.toLowerCase().includes(searchValue) ||
+            user.edad.toLowerCase().includes(searchValue) ||
+            user.telefono.toLowerCase().includes(searchValue) ||
+            user.direccion.toLowerCase().includes(searchValue) ||
+            user.sexo.toLowerCase().includes(searchValue) ||
+            user.nacionalidad.toLowerCase().includes(searchValue)
     );
 
     const start = (currentPage - 1) * limit;

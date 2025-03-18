@@ -1,3 +1,5 @@
+import { showToast } from "../toast";
+
 document.addEventListener("DOMContentLoaded", async function () {
     let currentPage = 1;
     let allPeliculas = []; // Array para almacenar todas las películas cargadas
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             allPeliculas = [...allPeliculas, ...peliculas.data];
             updatePeliculas(allPeliculas);
 
-            // Desplazar hacia el último elemento agregado
+            // Desplazar 
             const lastElement = peliculasContainer.lastElementChild;
             if (lastElement) {
                 lastElement.scrollIntoView({ behavior: "smooth" });
@@ -99,7 +101,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <div class="card-body p-2">
                     <h2 class="card-title uppercase">${pelicula.nombre}</h2>
                     <p class="text-gray-400 text-xs">${pelicula.descripcion}</p>
-                       <p class="text-success font-bold text-xs">${pelicula.year}</p>
+                       <div class="flex gap-2 justify-between w-full">
+                        <p class="text-gray-400 uppercase font-bold text-xs">${pelicula.categoria}</p>
+                        <p class="text-success font-bold text-xs">${pelicula.year}</p>
+                       </div>
                     <div class="card-actions justify-end">
                         <button class="text-lg underline text-success btntrailer" data-trailer-url="${
                             pelicula.trailer_url
@@ -161,5 +166,66 @@ document.addEventListener("DOMContentLoaded", async function () {
             showTrailer(trailerUrl);
         }
     });
+
+
+    document.getElementById("BtnExcell").addEventListener("click", async function () {
+        const peliculasExport = [];
     
+        // Obtener solo las películas visibles en peliculasContainer
+        document.querySelectorAll("#peliculasContainer .card").forEach((card) => {
+            const nombre = card.querySelector(".card-title")?.textContent.trim();
+            const descripcion = card.querySelector("p.text-gray-400")?.textContent.trim() || "";
+            const categoria = card.querySelector("p.text-gray-400.uppercase.font-bold.text-xs")?.textContent.trim() || ""; 
+            const year = card.querySelector("p.text-success")?.textContent.trim() || "";
+    
+            peliculasExport.push({
+                nombre,
+                descripcion,
+                categoria,
+                year,
+            });
+        });
+    
+        if (peliculasExport.length === 0) {
+            showToast("No hay datos para exportar.");
+            return;
+        }
+    
+        let archivos = [];
+    
+        for (let i = 0; i < peliculasExport.length; i += 50) {
+            const batch = peliculasExport.slice(i, i + 50);
+    
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("Películas");
+    
+            // Añadir encabezados incluyendo la categoría
+            worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
+    
+            batch.forEach((pelicula) => {
+                worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
+            });
+    
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+    
+            archivos.push({
+                blob,
+                nombre: `Peliculas_Lote_${Math.floor(i / 50) + 1}.xlsx`,
+            });
+        }
+    
+        archivos.forEach((archivo) => {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(archivo.blob);
+            a.download = archivo.nombre;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    });
+    
+
 });
