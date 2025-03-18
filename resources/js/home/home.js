@@ -99,8 +99,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }" />
                 </figure>
                 <div class="card-body p-2">
-                    <h2 class="card-title uppercase">${pelicula.nombre}</h2>
-                    <p class="text-gray-400 text-xs">${pelicula.descripcion}</p>
+                 <h2 class="card-title uppercase">${pelicula.nombre.split(" ")[0]}</h2>
+                    <p class="text-gray-400 text-xs">${pelicula.descripcion.split(" ")[0]}</p>
                        <div class="flex gap-2 justify-between w-full">
                         <p class="text-gray-400 uppercase font-bold text-xs">${pelicula.categoria}</p>
                         <p class="text-success font-bold text-xs">${pelicula.year}</p>
