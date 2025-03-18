@@ -13,7 +13,7 @@
        </div>
         
 
-        <div id="peliculasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-0.5"></div>
+        <div id="peliculasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-4 px-0.5"></div>
 
         <!-- Modal -->
         <dialog id="trailerModal" class="modal">
@@ -87,13 +87,13 @@
 
     function updatePeliculas(filteredPeliculas) {
         peliculasContainer.innerHTML = filteredPeliculas.map(pelicula => `
-            <div class="card card-side border-gray-300 border bg-base-100 shadow max-h-[200px] duration-500 transition-all">
+            <div class="card card-side border-gray-300 border bg-base-100 shadow max-h-[130px] duration-500 transition-all">
                 <figure>
-                    <img class="h-[150px] ${pelicula.foto ? '' : 'hidden'} w-[120px] bg-white object-cover" src="storage/${pelicula.foto}" />
+                    <img class="${pelicula.foto ? '' : 'hidden'} w-[120px] bg-white object-fill h-full" src="storage/${pelicula.foto}" />
                 </figure>
-                <div class="card-body">
+                <div class="card-body p-2">
                     <h2 class="card-title uppercase">${pelicula.nombre}</h2>
-                    <p class="text-gray-400 text-lg">${pelicula.descripcion}</p>
+                    <p class="text-gray-400 text-xs">${pelicula.descripcion}</p>
                     <div class="card-actions justify-end">
                         <button class="text-lg underline text-success btntrailer" data-trailer-url="${pelicula.trailer_url}">Ver más</button>
                     </div>
