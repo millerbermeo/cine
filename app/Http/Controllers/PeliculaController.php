@@ -17,12 +17,21 @@ class PeliculaController extends Controller
         // Determinamos el número de elementos por página
         $perPage = 20;
     
-        // Recuperamos las películas de 20 en 20, ordenadas por la fecha de creación
-        $peliculas = Pelicula::orderBy('created_at', 'desc')->paginate($perPage);
+        // Creamos la consulta base
+        $query = Pelicula::orderBy('created_at', 'desc');
     
-        // Retornamos las películas como respuesta JSON, incluyendo la información de paginación
+        // Filtrar por rango de años si se proporcionan
+        if ($request->has('fecha1') && $request->has('fecha2')) {
+            $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
+        }
+    
+        // Aplicar paginación
+        $peliculas = $query->paginate($perPage);
+    
+        // Retornar respuesta JSON con las películas paginadas
         return response()->json($peliculas);
     }
+    
     
     public function index2()
     {

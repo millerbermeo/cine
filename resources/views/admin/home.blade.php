@@ -9,8 +9,12 @@
 
                 <h1 class="text-2xl text-success">Listado de Peliculas</h1>
                 <div class="flex justify-center gap-3">
-                    <input type="text" id="fecha1" placeholder="Fecha 1" class="input max-w-24" />
+                    <div class="relative">
+                        <input type="text" id="fecha1" placeholder="Fecha 1" class="input max-w-24" />
                     <input type="text" id="fecha2" placeholder="Fecha 2" class="input max-w-24" />
+                    <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
+                    </div>
+                    
                     <input type="text" id="searchInput" class="input input-bordered min-w-80"
                         placeholder="Buscar nombre, categoria, descripcion, año..." />
                         <div>
