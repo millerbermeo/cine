@@ -20,8 +20,10 @@ session_start();
 <body>
 
     <div class="flex w-full bg-[#F0F3F5] overflow-hidden items-start">
-        <x-sidebar />
-        <div class="flex flex-col w-full">
+        <div>
+            <x-sidebar />
+        </div>
+        <div class="flex flex-col w-full h-screen overflow-y-auto">
             <x-navbar />
             <div class="mx-5">
                 @yield('content')

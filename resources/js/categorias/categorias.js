@@ -18,6 +18,9 @@ function openModal() {
 function closeModal() {
     document.getElementById("id_modal_categoria").close();
     document.getElementById("nombre").value = "";
+    const nombreInput = document.getElementById("nombre");
+    document.getElementById("errorNombre").textContent = "";
+    nombreInput.classList.remove("input-error");
 }
 
 btnOpenModal.addEventListener("click", openModal);
@@ -256,19 +259,12 @@ function actualizarEstadoCategoria(categoriaId, estado) {
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.success) {
-                showToast(
-                    `Categoría ${
-                        estado ? "activada" : "desactivada"
-                    } con éxito`,
-                    "success"
-                );
-            } else {
-                showToast(
-                    "Error al actualizar el estado de la categoría",
-                    "error"
-                );
-            }
+            showToast(
+                `Categoría ${
+                    estado ? "activada" : "desactivada"
+                } con éxito`,
+                "success"
+            );
         })
         .catch((error) => {
             console.error("Error:", error);

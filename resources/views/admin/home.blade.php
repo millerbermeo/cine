@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
 <div>
@@ -9,12 +9,15 @@
 
                 <h1 class="text-2xl text-success">Listado de Peliculas</h1>
                 <div class="flex justify-center gap-3">
-                    <input type="text" id="fecha1" placeholder="Fecha 1" class="input" />
-                    <input type="text" id="fecha2" placeholder="Fecha 2" class="input" />
+                    <input type="text" id="fecha1" placeholder="Fecha 1" class="input max-w-24" />
+                    <input type="text" id="fecha2" placeholder="Fecha 2" class="input max-w-24" />
                     <input type="text" id="searchInput" class="input input-bordered min-w-80"
                         placeholder="Buscar nombre, categoria, descripcion, año..." />
+                        <div>
+                            <button id="BtnExcell" class="btn btn-success">Excell</button>
+                        </div>
                     <div>
-                        <button class="btn btn-info text-white">Clear</button>
+                        <button id="BtnClear" class="btn btn-warning">Limpiar</button>
                     </div>
                 </div>
             </div>
@@ -52,7 +55,7 @@
 </div>
 @endsection
 
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", async function () {
         let currentPage = 1;
     const peliculasContainer = document.getElementById("peliculasContainer");
@@ -156,4 +159,4 @@
 
   
     });
-</script>
+</script> --}}
