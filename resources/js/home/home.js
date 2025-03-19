@@ -225,7 +225,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
 
-
     document.getElementById("BtnExcell").addEventListener("click", async function () {
         const searchInput = document.getElementById("searchInput");
         const fecha1Input = document.getElementById("fecha1");
@@ -280,47 +279,38 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
     
-            let archivos = [];
+            let archivo; // Variable para almacenar el archivo único
     
-            for (let i = 0; i < peliculas.length; i += 50) {
-                const batch = peliculas.slice(i, i + 50);
+            // Crear el archivo Excel con todas las películas
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("Películas");
     
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet("Películas");
+            worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
     
-                worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
+            peliculas.forEach((pelicula) => {
+                worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
+            });
     
-                batch.forEach((pelicula) => {
-                    worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
-                });
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
     
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], {
-                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                });
+            archivo = {
+                blob,
+                nombre: "Peliculas_Completo.xlsx",
+            };
     
-                archivos.push({
-                    blob,
-                    nombre: `Peliculas_Lote_${Math.floor(i / 50) + 1}.xlsx`,
-                });
-            }
+            // Descargar el archivo generado
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(archivo.blob);
+            a.download = archivo.nombre;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
     
-            // Descargar los archivos generados
-            for (let i = 0; i < archivos.length; i++) {
-                const archivo = archivos[i];
-                setTimeout(() => {
-                    const a = document.createElement("a");
-                    a.href = URL.createObjectURL(archivo.blob);
-                    a.download = archivo.nombre;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    if (i === archivos.length - 1) {
-                        // Ocultar contenedor de carga cuando todas las descargas hayan terminado
-                        loadingContainer.classList.add("hidden");
-                    }
-                }, i * 1000); // Retraso de 1 segundo entre descargas
-            }
+            // Ocultar el contenedor de carga cuando termine la descarga
+            loadingContainer.classList.add("hidden");
     
         } catch (error) {
             console.error("Error al exportar las películas:", error);
@@ -328,6 +318,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             loadingContainer.classList.add("hidden"); // Ocultar contenedor de carga en caso de error
         }
     });
+    
     
 
 
