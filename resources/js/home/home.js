@@ -445,6 +445,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Función para cerrar el modal
     function cerrarModal() {
         const modal = document.getElementById("modal_confirmar_carrito");
+        showToast("Película Vendida", "success");
         modal.close(); // Cierra el modal
     }
 

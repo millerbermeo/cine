@@ -6,8 +6,8 @@
 
         <div class="top-0 sticky z-30 bg-white p-3 mb-2 rounded">
             <div class="flex justify-between items-end ">
-
-                <h1 class="text-lg text-success">Peliculas</h1>
+{{-- 
+                <h1 class="text-lg text-success mr-5">Peliculas</h1> --}}
                 <div class="flex justify-center gap-3">
                     <div class="relative flex gap-2">
                         <input type="text" id="fecha1" placeholder="Fecha 1" class="input min-w-24" />
@@ -40,7 +40,7 @@
                     
                         <div class="drawer-side pr-4">
                             <label for="CarId" aria-label="close sidebar" class="drawer-overlay"></label>
-                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 h-[50vh] overscroll-auto p-4">
                                 <!-- Dynamic list content will be added here -->
                             </ul>
                         </div>
