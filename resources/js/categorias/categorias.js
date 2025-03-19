@@ -169,7 +169,7 @@ document
     .getElementById("submitFormCategoria")
     .addEventListener("click", function () {
         const nombreInput = document.getElementById("nombre");
-        let nombre = nombreInput.value.trim();
+        let nombre = nombreInput.value
         
         nombre = nombre.toLowerCase().replace(/\s+/g, '');
         
