@@ -40,7 +40,7 @@
                     
                         <div class="drawer-side pr-4">
                             <label for="CarId" aria-label="close sidebar" class="drawer-overlay"></label>
-                            <ul id="cartList" class="menu bg-base-200 text-base-content  w-80 h-[50vh] overscroll-auto p-4">
+                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                                 <!-- Dynamic list content will be added here -->
                             </ul>
                         </div>
