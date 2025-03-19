@@ -25,15 +25,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             const response = await fetch(url);
-            const peliculasActivas = await response.json();
-            
-            // Acceder a las peliculas activasa
-            const peliculas = peliculasActivas.data.filter(pelicula => pelicula.estado == 'activo');
-            
-            
+            const peliculas = await response.json();
+
             if (page === 1) allPeliculas = []; // Si es la primera página, reiniciamos la lista
-            
-            allPeliculas = [...allPeliculas, ...peliculas];
+
+            allPeliculas = [...allPeliculas, ...peliculas.data];
 
             // Si hay un término de búsqueda, aplicar el filtro antes de actualizar la UI
             const searchTerm = searchInput.value.toLowerCase().trim();
