@@ -57,8 +57,8 @@ const renderTable = () => {
     const filteredPeliculas = peliculas.filter((pelicula) =>
         pelicula.nombre.toLowerCase().includes(searchValue) ||
         pelicula.descripcion.toLowerCase().includes(searchValue) ||
-        pelicula.categoria.toLowerCase().includes(searchValue)||
-        pelicula.year.toLowerCase().includes(searchValue)
+        pelicula.categoria.toLowerCase().includes(searchValue)
+        // pelicula.year.toLowerCase().includes(searchValue)
     );
 
     const start = (currentPage - 1) * limit;
@@ -69,14 +69,22 @@ const renderTable = () => {
             (pelicula) => `
         <tr>
             <td>${pelicula.id}</td>
-            <td>${pelicula.nombre}</td>
-            <td>${pelicula.descripcion}</td>
-            <td>${pelicula.categoria}</td>
+            <td>${pelicula.nombre ?? ''}</td>
+            <td>${pelicula.descripcion ?? ''}</td>
+            <td>${pelicula.categoria ?? ''}</td>
+            <td>${pelicula.precio ?? ''}</td>
             <td><img class="rounded-full h-12 w-12" src="storage/${pelicula.foto}" alt="${pelicula.foto}""></td>
-            <td>${pelicula.year}</td>
-            <td>${pelicula.trailer_url}</td>
+            <td>${pelicula.year ?? ''}</td>
+            <td>${pelicula.trailer_url ?? ''}</td>
+              <td>
+                <label class="swap flex gap-2">
+                    ${pelicula.estado === 'activo' ? "Activo" : "Inactivo"}
+                    <input type="checkbox" class="toggle  toggle-success" 
+                        data-peli-id="${pelicula.id}" ${pelicula.estado == 'activo' ? "checked" : ""}>
+                </label>
+            </td>
             <td><button  type="button" class="btn-abrir btn flex btn-active rounded-4xl btn-info text-sm text-white" data-pelicula-id="${pelicula.id}">Editar</button></td>
-            <td><button class="btn btn-error rounded-4xl text-white btn-eliminar-m" data-pelicula-id-delete="${pelicula.id}">Eliminar</button></td>
+            <td><button class="btn btn-error hidden rounded-4xl text-white btn-eliminar-m" data-pelicula-id-delete="${pelicula.id}">Eliminar</button></td>
         </tr>
     `
         )
@@ -95,6 +103,14 @@ const renderTable = () => {
             const id = e.target.getAttribute("data-pelicula-id-delete");
             mostrarModalEliminar(id);
         }
+    });
+
+    document.querySelectorAll(".toggle").forEach((toggle) => {
+        toggle.addEventListener("change", function () {
+            const userId = this.getAttribute("data-peli-id");
+            const estado = this.checked ? 'activo' : 'inactivo';
+            actualizarEstadoPeli(userId, estado);
+        });
     });
 
     renderPagination(filteredPeliculas.length);
@@ -230,12 +246,12 @@ document.getElementById("submitFormPeli").addEventListener("click", function () 
         return;
     }
 
-    limpiarValidaciones([
-        { idInput: "nombre", idError: "nombreError" },
-        { idInput: "descripcion", idError: "descripcionError" },
-        { idInput: "categoria", idError: "CategoriaError", errorClass: "select-error" },
-        { idInput: "year", idError: "YearError" }
-    ]);
+    // limpiarValidaciones([
+    //     { idInput: "nombre", idError: "nombreError" },
+    //     { idInput: "descripcion", idError: "descripcionError" },
+    //     { idInput: "categoria", idError: "CategoriaError", errorClass: "select-error" },
+    //     { idInput: "year", idError: "YearError" }
+    // ]);
     
 
     const peliculaData = {
@@ -332,3 +348,34 @@ function listarCategoriasSelect() {
         })
         .catch((error) => console.error("Error al obtener categorías:", error));
 }
+
+
+    const actualizarEstadoPeli = (id, estado) => {
+        console.log(estado)
+        fetch(`/put-peliculas/${id}/estado`, {
+            
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify({ estado }),
+        })
+              .then((response) => response.json())
+                    .then((data) => {
+                        showToast(
+                            `Pelicula ${
+                                estado ? "activada" : "desactivada"
+                            } con éxito`,
+                            "success"
+                        );
+                        listarPeliculas()
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        showToast("Error al actualizar el estado de la pelicula", "error");
+                    });
+    };
+    

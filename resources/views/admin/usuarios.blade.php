@@ -40,9 +40,9 @@
                 <th class="px-0.5 m-0.5 pl-3">Teléfono</th>
                 <th class="px-0.5 m-0.5 pl-3">Dirección</th>
                 <th class="px-0.5 m-0.5 pl-3">Sexo</th>
-                <th class="px-0.5 m-0.5 pl-3 hidden">Foto</th>
-                <th class="px-0.5 m-0.5 pl-3 hidden">Estado</th>
                 <th class="px-0.5 m-0.5 pl-3">Nacionalidad</th>
+                <th class="px-0.5 m-0.5 pl-3">Estado</th>
+                <th class="px-0.5 m-0.5 pl-3 hidden">Foto</th>
                 <th class="px-0.5 m-0.5 pl-3 hidden">Fecha</th>
                 <th class="px-0.5 m-0.5 pl-3">Acciones</th>
             </tr>
@@ -86,11 +86,13 @@
                     <legend class="fieldset-legend">Ingresar Telefono</legend>
                     <input id="telefono" type="text" class="input" placeholder="Telefono" />
                     <p class="fieldset-label" id="telefonoError">Obligatorio</p>
+                    <p class="fieldset-label" id="TelefonoErrorCantidad"></p>
                 </fieldset>
                 <fieldset class="fieldset w-full">
                     <legend class="fieldset-legend">Ingresar Edad</legend>
                     <input id="edad" type="text" class="input" placeholder="Edad" />
                     <p class="fieldset-label" id="edadError">Obligatorio</p>
+                    <p class="fieldset-label" id="EdadErrorCantidad"></p>
                 </fieldset>
             </div>
 

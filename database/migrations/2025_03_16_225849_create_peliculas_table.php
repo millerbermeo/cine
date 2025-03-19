@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->string('foto')->nullable();
             $table->year('year');
             $table->string('trailer_url')->nullable();
+            $table->enum('estado', ['activo', 'inactivo'])->default('activo');
+            $table->decimal('precio', 10, 2)->default(10000);
             $table->timestamps();
         });
     }

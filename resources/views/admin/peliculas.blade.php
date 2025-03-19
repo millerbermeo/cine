@@ -35,11 +35,12 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Categoría</th>
+                <th>Precio</th>
                 <th>Foto</th>
                 <th>Año</th>
                 <th>Trailer</th>
+                <th>estado</th>
                 <th>Editar</th>
-                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody id="peliculaData"></tbody>

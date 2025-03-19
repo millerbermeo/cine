@@ -11,7 +11,7 @@ class UserController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     // Obtener todos los usuarios
     public function index()
     {
@@ -60,32 +60,32 @@ class UserController extends Controller
     }
 
     // Actualizar un usuario
-// Actualizar un usuario
-public function update(Request $request, $id)
-{
-    $user = User::findOrFail($id);
+    // Actualizar un usuario
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-    $user->nombre = $request->input('nombre');
-    $user->apellido = $request->input('apellido');
-    $user->email = $request->input('email');
+        $user->nombre = $request->input('nombre');
+        $user->apellido = $request->input('apellido');
+        $user->email = $request->input('email');
 
-    // Verificar si se proporcionó una nueva contraseña
-    if ($request->filled('password')) {
-        $user->password = bcrypt($request->input('password'));
+        // Verificar si se proporcionó una nueva contraseña
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+
+        $user->identificacion = $request->input('identificacion');
+        $user->telefono = $request->input('telefono');
+        $user->edad = $request->input('edad');
+        $user->direccion = $request->input('direccion');
+        $user->sexo = $request->input('sexo');
+        $user->nacionalidad = $request->input('nacionalidad');
+        $user->foto = $request->input('foto'); // Si es necesario
+
+        $user->save();
+
+        return response()->json(['success' => true]);
     }
-
-    $user->identificacion = $request->input('identificacion');
-    $user->telefono = $request->input('telefono');
-    $user->edad = $request->input('edad');
-    $user->direccion = $request->input('direccion');
-    $user->sexo = $request->input('sexo');
-    $user->nacionalidad = $request->input('nacionalidad');
-    $user->foto = $request->input('foto'); // Si es necesario
-
-    $user->save();
-
-    return response()->json(['success' => true]);
-}
 
 
     // Eliminar un usuario
@@ -100,5 +100,21 @@ public function update(Request $request, $id)
         $user->delete();
 
         return response()->json(['message' => 'Usuario eliminado con éxito']);
+    }
+
+    // Cambiar el estado de un usuario (activo/inactivo)
+    public function changeStatus($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        // Alternar entre 'activo' e 'inactivo'
+        $user->estado = $user->estado === 'activo' ? 'inactivo' : 'activo';
+        $user->save();
+
+        return response()->json(['message' => 'Estado actualizado con éxito', 'estado' => $user->estado]);
     }
 }

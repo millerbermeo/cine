@@ -8,5 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Pelicula extends Model
 {
     use HasFactory;
-    protected $fillable = ['nombre', 'descripcion', 'categoria', 'foto', 'year', 'trailer_url'];
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'categoria',
+        'foto',
+        'year',
+        'trailer_url',
+        'estado',
+        'precio', // Añadimos el campo precio
+    ];
+
+    protected $attributes = [
+        'estado' => 'activo', // Valor por defecto
+        'precio' => 10000, // Valor por defecto
+    ];
 }

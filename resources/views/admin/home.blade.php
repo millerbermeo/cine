@@ -9,14 +9,18 @@
 
                 <h1 class="text-2xl text-success">Listado de Peliculas</h1>
                 <div class="flex justify-center gap-3">
-                    <div class="relative">
-                        <input type="text" id="fecha1" placeholder="Fecha 1" class="input max-w-24" />
-                        <input type="text" id="fecha2" placeholder="Fecha 2" class="input max-w-24" />
+                    <div class="relative flex gap-2">
+                        <input type="text" id="fecha1" placeholder="Fecha 1" class="input min-w-24" />
+                        <input type="text" id="fecha2" placeholder="Fecha 2" class="input min-w-24" />
                         <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
                     </div>
 
-                    <input type="text" id="searchInput" class="input input-bordered min-w-80"
+                    <input type="text" id="searchInput" class="input input-bordered min-w-40"
                         placeholder="Buscar nombre, categoria, descripcion, año..." />
+                        <select id="categoryFilter" class="input input-bordered min-w-40" placeholder="Filtrar por categoría">
+                            <option value="">Seleccionar categoría</option>
+                        </select>
+                        
                     <div>
                         <button id="BtnExcell" class="btn btn-success"><i class="fas fa-download"></i>
                             Excell</button>
@@ -24,6 +28,24 @@
                     <div>
                         <button id="BtnClear" class="btn btn-warning">Limpiar</button>
                     </div>
+
+                    <div class="drawer drawer-end w-20">
+                        <input id="CarId" type="checkbox" class="drawer-toggle" />
+                        <div class="drawer-content">
+                            <!-- Page content here -->
+                            <label for="CarId" class="drawer-button btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i>
+                            </label>
+                        </div>
+                    
+                        <div class="drawer-side pr-4">
+                            <label for="CarId" aria-label="close sidebar" class="drawer-overlay"></label>
+                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+                                <!-- Dynamic list content will be added here -->
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -57,6 +79,17 @@
             </div>
         </div>
     </div>
+
+    <dialog id="modal_confirmar_carrito" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold text-center mb-5">Confirmar Venta</h3>
+            <div class="modal-action flex justify-center">
+                <button id="btn-cerrar-carrito" class="btn btn-gray">Cancelar</button>
+                <button id="btn-confirmar-carrito" class="btn btn-error text-white">Confirmar Venta</button>
+            </div>
+        </div>
+    </dialog>
+    
 </div>
 @endsection
 

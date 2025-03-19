@@ -1,4 +1,4 @@
-<div class="flex justify-between items-center bg-white w-[97.5%] py-3 px-6 mx-auto my-3 rounded-xl shadow-md  z-50">
+<div class="flex justify-between items-center bg-white w-[97.5%] py-3 px-6 mx-auto my-3 rounded-xl shadow-md  z-30">
     <div class="flex flex-col gap-1">
         <h1 class="text-2xl font-semibold text-[#FF5252]">Dashboard</h1>
         <span class="text-gray-400 text-sm">Administracion de Peliculas</span>

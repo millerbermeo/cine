@@ -92,7 +92,7 @@ const renderTable = () => {
     document.querySelectorAll(".toggle").forEach((toggle) => {
         toggle.addEventListener("change", function () {
             const categoriaId = this.getAttribute("data-categoria-id");
-            const estado = this.checked ? 1 : 0;
+            const estado = this.checked ? 'activo' : 'inactivo';
             actualizarEstadoCategoria(categoriaId, estado);
         });
     });
@@ -266,6 +266,7 @@ function actualizarEstadoCategoria(categoriaId, estado) {
                 } con éxito`,
                 "success"
             );
+            listarCategorias()
         })
         .catch((error) => {
             console.error("Error:", error);

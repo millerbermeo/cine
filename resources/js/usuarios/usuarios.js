@@ -1,5 +1,5 @@
 import { showToast } from "../toast";
-import { validarCampo } from "../validar-inputs";
+import { limpiarValidaciones, validarCampo } from "../validar-inputs";
 import { limpiarFormulario } from "./clean-form";
 import { formatFecha } from "./format-date";
 
@@ -22,13 +22,42 @@ function openModal() {
     limpiarFormulario();
 }
 function closeModal() {
+  
+        document.getElementById("nombre").classList.remove("input-error");
+        document.getElementById("nombreError").innerHTML = "";
+   
+    
+        document.getElementById("apellido").classList.remove("input-error");
+        document.getElementById("apellidoError").innerHTML = "";
+
+    
+
+        document.getElementById("identificacion").classList.remove("input-error");
+        document.getElementById("identificacionError").innerHTML = "";
+
+        document.getElementById("email").classList.remove("input-error");
+        document.getElementById("emailError").innerHTML = "";
+
+    
+
+        document.getElementById("telefono").classList.remove("input-error");
+        document.getElementById("telefonoError").innerHTML = "";
+  
+
+        document.getElementById("edad").classList.remove("input-error");
+        document.getElementById("edadError").innerHTML = "";
+  
+    
     id_modal_usuario.close(); // Cierra el modal
+    limpiarValidaciones()
+
 }
 btnOpenModal.addEventListener("click", (e) => {
     openModal();
 });
 btnCloseModal.addEventListener("click", (e) => {
     closeModal();
+    limpiarValidaciones()
     limpiarFormulario();
 });
 
@@ -42,18 +71,26 @@ const renderTable = () => {
     const searchValue = document
         .getElementById("searchInput")
         .value.toLowerCase();
-    const filteredUsers = users.filter(
-        (user) =>
-            user.nombre.toLowerCase().includes(searchValue) ||
-            user.apellido.toLowerCase().includes(searchValue) ||
-            user.email.toLowerCase().includes(searchValue) ||
-            user.identificacion.toLowerCase().includes(searchValue) ||
-            user.edad.toLowerCase().includes(searchValue) ||
-            user.telefono.toLowerCase().includes(searchValue) ||
-            user.direccion.toLowerCase().includes(searchValue) ||
-            user.sexo.toLowerCase().includes(searchValue) ||
-            user.nacionalidad.toLowerCase().includes(searchValue)
-    );
+        const searchWords = searchValue.split(/\s+/); // Divide el término de búsqueda en palabras
+
+        // Filtrar usuarios con base en la búsqueda
+        const filteredUsers = users.filter((user) => {
+            // Comprobar que cada palabra de la búsqueda esté presente en algún campo del usuario
+            return searchWords.every(word => {
+                // Comprobar si el campo no es null ni undefined antes de intentar buscar
+                return (
+                    (user.nombre && user.nombre.toLowerCase().includes(word)) ||
+                    (user.apellido && user.apellido.toLowerCase().includes(word)) ||
+                    (user.email && user.email.toLowerCase().includes(word)) ||
+                    (user.identificacion && user.identificacion.toLowerCase().includes(word)) ||
+                    (user.edad && user.edad.toString().toLowerCase().includes(word)) ||
+                    (user.telefono && user.telefono.toString().toLowerCase().includes(word)) ||
+                    (user.direccion && user.direccion.toLowerCase().includes(word)) ||
+                    (user.sexo && user.sexo.toLowerCase().includes(word)) ||
+                    (user.nacionalidad && user.nacionalidad.toLowerCase().includes(word))
+                );
+            });
+        });
 
     const start = (currentPage - 1) * limit;
     const paginatedUsers = filteredUsers.slice(start, start + limit);
@@ -72,8 +109,15 @@ const renderTable = () => {
             <td>${user.direccion ?? ''}</td>
             <td>${user.sexo ?? ''}</td>
             <td>${user.nacionalidad ?? ''}</td>
-            <td class="flex gap-2"><button type="button" class="btn-abrir btn  flex rounded-4xl btn-info text-sm text-white" data-user-id="${user.id}">Editar</button>
-                 <button  class="btn  flex   btn-error rounded-4xl text-sm text-white btn-eliminar-m" data-user-id-delete="${user.id}">Eliminar</button>
+              <td>
+                <label class="swap flex gap-2">
+                    ${user.estado === 'activo' ? "Activo" : "Inactivo"}
+                    <input type="checkbox" class="toggle toggle-success" 
+                        data-user-id="${user.id}" ${user.estado == 'activo' ? "checked" : ""}>
+                </label>
+            </td>
+            <td class="flex  gap-2"><button type="button" class="btn-abrir btn  flex rounded-4xl btn-info text-sm text-white" data-user-id="${user.id}">Editar</button>
+                 <button  class="btn  hidden   btn-error rounded-4xl text-sm text-white btn-eliminar-m" data-user-id-delete="${user.id}">Eliminar</button>
             </td>
         </tr>
     `
@@ -93,6 +137,14 @@ const renderTable = () => {
             const id = e.target.getAttribute("data-user-id-delete");
             mostrarModalEliminar(id);
         }
+    });
+
+    document.querySelectorAll(".toggle").forEach((toggle) => {
+        toggle.addEventListener("change", function () {
+            const userId = this.getAttribute("data-user-id");
+            const estado = this.checked ? 'activo' : 'inactivo';
+            actualizarEstadoUsuario(userId, estado);
+        });
     });
 
     renderPagination(filteredUsers.length);
@@ -192,26 +244,82 @@ document.getElementById("submitForm").addEventListener("click", function () {
     const nacionalidad = document.getElementById("nacionalidadSelect").value;
     const password = document.getElementById("password").value;
 
+    
+
     // Expresiones regulares para validaciones
     const regexNombreApellido = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const regexTelefono = /^[0-9]{7,10}$/;
     const regexEdad = /^[0-9]{1,3}$/;
-
+    
     let isValid = true;
-
-    // Validaciones usando la función modular
-    isValid &= validarCampo("nombre", "nombreError", "El nombre es obligatorio y solo puede contener letras y espacios.") && regexNombreApellido.test(nombre);
-    isValid &= validarCampo("apellido", "apellidoError", "El apellido es obligatorio y solo puede contener letras y espacios.") && regexNombreApellido.test(apellido);
-    isValid &= validarCampo("identificacion", "identificacionError", "El campo Identificación es obligatorio.");
-    isValid &= validarCampo("email", "emailError", "Ingrese un correo válido.") && regexEmail.test(email);
-    isValid &= validarCampo("telefono", "telefonoError", "El teléfono debe contener entre 7 y 10 dígitos.") && regexTelefono.test(telefono);
-    isValid &= validarCampo("edad", "edadError", "Ingrese una edad válida (entre 0 y 120).") && regexEdad.test(edad) && edad >= 0 && edad <= 120;
-
+    
+    // Validación de nombre
+    if (!nombre || !regexNombreApellido.test(nombre)) {
+        document.getElementById("nombre").classList.add("input-error");
+        document.getElementById("nombreError").innerHTML = '<p class="text-error">El nombre es obligatorio y solo puede contener letras y espacios.</p>';
+        isValid = false;
+    } else {
+        document.getElementById("nombre").classList.remove("input-error");
+        document.getElementById("nombreError").innerHTML = "";
+    }
+    
+    // Validación de apellido
+    if (!apellido || !regexNombreApellido.test(apellido)) {
+        document.getElementById("apellido").classList.add("input-error");
+        document.getElementById("apellidoError").innerHTML = '<p class="text-error">El apellido es obligatorio y solo puede contener letras y espacios.</p>';
+        isValid = false;
+    } else {
+        document.getElementById("apellido").classList.remove("input-error");
+        document.getElementById("apellidoError").innerHTML = "";
+    }
+    
+    // Validación de identificación
+    const identificacionNum = parseInt(identificacion, 10);
+    if (!identificacion || isNaN(identificacionNum) || identificacionNum <= 0) {
+        document.getElementById("identificacion").classList.add("input-error");
+        document.getElementById("identificacionError").innerHTML = '<p class="text-error">La identificación es obligatoria y debe ser un número entero válido.</p>';
+        isValid = false;
+    } else {
+        document.getElementById("identificacion").classList.remove("input-error");
+        document.getElementById("identificacionError").innerHTML = "";
+    }
+    // Validación de email
+    if (!email || !regexEmail.test(email)) {
+        document.getElementById("email").classList.add("input-error");
+        document.getElementById("emailError").innerHTML = '<p class="text-error">Ingrese un correo válido.</p>';
+        isValid = false;
+    } else {
+        document.getElementById("email").classList.remove("input-error");
+        document.getElementById("emailError").innerHTML = "";
+    }
+    
+    // Validación de teléfono
+    if (!telefono || !regexTelefono.test(telefono)) {
+        document.getElementById("telefono").classList.add("input-error");
+        document.getElementById("telefonoError").innerHTML = '<p class="text-error">El teléfono debe contener entre 7 y 10 dígitos.</p>';
+        isValid = false;
+    } else {
+        document.getElementById("telefono").classList.remove("input-error");
+        document.getElementById("telefonoError").innerHTML = "";
+    }
+    
+    // Validación de edad
+    const edadNum = parseInt(edad, 10);
+    if (!edad || !regexEdad.test(edad) || edadNum < 0 || edadNum > 120) {
+        document.getElementById("edad").classList.add("input-error");
+        document.getElementById("edadError").innerHTML = '<p class="text-error">Ingrese una edad válida (entre 0 y 120).</p>';
+        isValid = false;
+    } else {
+        document.getElementById("edad").classList.remove("input-error");
+        document.getElementById("edadError").innerHTML = "";
+    }
+    
+    // Si alguna validación falla, detener el proceso
     if (!isValid) {
         return;
     }
-
+    
 
     // Crear objeto de datos para enviar
     const data = {
@@ -259,7 +367,9 @@ document.getElementById("submitForm").addEventListener("click", function () {
             })
             .catch((error) => {
                 const mensajeError = error.response.data.message || "Ocurrió un error inesperado";
-        
+                // showToast(mensajeError, "error");
+                document.getElementById("email").classList.add("input-error");
+                document.getElementById("emailError").innerHTML = '<p class="text-error">Email ya esta en uso</p>';
                 // Si hay errores específicos (como email ya registrado)
                 if (error.response.data.errors) {
                     const errores = error.response.data.errors;
@@ -267,6 +377,8 @@ document.getElementById("submitForm").addEventListener("click", function () {
                     showToast(`${mensajeError}: ${detalles}`, "error");
                 } else {
                     showToast(mensajeError, "error");
+                    document.getElementById("email").classList.add("input-error");
+                    document.getElementById("emailError").innerHTML = '<p class="text-error">Email ya esta en uso</p>';
                 }
             });
     }
@@ -299,3 +411,33 @@ document
             })
             .catch((error) => console.error("Error:", error));
     });
+
+    const actualizarEstadoUsuario = (id, estado) => {
+        console.log(estado)
+        fetch(`/put-usuarios/${id}/estado`, {
+            
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+            body: JSON.stringify({ estado }),
+        })
+              .then((response) => response.json())
+                    .then((data) => {
+                        showToast(
+                            `Usuario ${
+                                estado ? "activada" : "desactivada"
+                            } con éxito`,
+                            "success"
+                        );
+                        listarUsuarios()
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        showToast("Error al actualizar el estado del Usuario", "error");
+                    });
+    };
+    

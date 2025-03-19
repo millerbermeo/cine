@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/post-usuarios', [UserController::class, 'store']); // Crear un nuevo usuario
     Route::put('/put-usuarios/{id}', [UserController::class, 'update']); // Actualizar un usuario
     Route::delete('/delete-usuarios/{id}', [UserController::class, 'destroy']); // Eliminar un usuario
+    Route::patch('/put-usuarios/{id}/estado', [UserController::class, 'changeStatus']);
 
 
     Route::get('/get-peliculas', [PeliculaController::class, 'index']);
@@ -68,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-peliculas/{id}', [PeliculaController::class, 'show']);
     Route::put('/put-peliculas/{id}', [PeliculaController::class, 'update']);
     Route::delete('/delete-peliculas/{id}', [PeliculaController::class, 'destroy']);
+    Route::patch('/put-peliculas/{id}/estado', [PeliculaController::class, 'changeStatus']);
+
 
     Route::get('/get-categorias', [CategoriaController::class, 'index']); // Obtener todas las categorías
     Route::post('/post-categorias', [CategoriaController::class, 'store']); // Crear una nueva categoría
