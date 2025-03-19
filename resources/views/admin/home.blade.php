@@ -7,7 +7,7 @@
         <div class="top-0 sticky z-30 bg-white p-3 mb-2 rounded">
             <div class="flex justify-between items-end ">
 
-                <h1 class="text-2xl text-success">Listado de Peliculas</h1>
+                <h1 class="text-lg text-success">Listado de Peliculas</h1>
                 <div class="flex justify-center gap-3">
                     <div class="relative flex gap-2">
                         <input type="text" id="fecha1" placeholder="Fecha 1" class="input min-w-24" />
