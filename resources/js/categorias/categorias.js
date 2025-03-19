@@ -37,17 +37,17 @@ const renderTable = () => {
     const searchValue = document
         .getElementById("searchInput")
         .value.toLowerCase();
-        const filteredCategorias = categorias.filter((categoria) => {
-            const searchWords = searchValue.toLowerCase().split(' ').filter(Boolean); // Convierte el término de búsqueda en un array de palabras
-        
-            // Verifica que todas las palabras de búsqueda estén presentes en el nombre o estado de la categoría
-            const matchesSearchTerm = searchWords.every(word =>
-                categoria.nombre.toLowerCase().includes(word)
-            );
-        
-            return matchesSearchTerm;
-        });
-        
+    const filteredCategorias = categorias.filter((categoria) => {
+        const searchWords = searchValue.toLowerCase().split(' ').filter(Boolean); // Convierte el término de búsqueda en un array de palabras
+
+        // Verifica que todas las palabras de búsqueda estén presentes en el nombre o estado de la categoría
+        const matchesSearchTerm = searchWords.every(word =>
+            categoria.nombre.toLowerCase().includes(word)
+        );
+
+        return matchesSearchTerm;
+    });
+
 
     const start = (currentPage - 1) * limit;
     const paginatedCategorias = filteredCategorias.slice(start, start + limit);
@@ -61,23 +61,19 @@ const renderTable = () => {
             <td>${formatFecha(categoria.created_at)}</td>
                <td>
                 <label class="swap flex gap-2">
-                                    ${
-                                        categoria.estado == 1
-                                            ? "Activo"
-                                            : "Inactivo"
-                                    }
-                    <input type="checkbox" class="toggle toggle-success" data-categoria-id="${
-                        categoria.id
-                    }" ${categoria.estado ? "checked" : ""}>
+                                    ${categoria.estado == 1
+                    ? "Activo"
+                    : "Inactivo"
+                }
+                    <input type="checkbox" class="toggle toggle-success" data-categoria-id="${categoria.id
+                }" ${categoria.estado ? "checked" : ""}>
                 </label>
                 
             </td>
-            <td><button class="btn btn-info rounded-4xl text-white btn-abrir" data-categoria-id="${
-                categoria.id
-            }">Editar</button></td>
-            <td class="hidden"><button class="btn rounded-4xl btn-error text-white btn-eliminar" data-categoria-id-delete="${
-                categoria.id
-            }">Eliminar</button></td>
+            <td><button class="btn btn-info rounded-4xl text-white btn-abrir" data-categoria-id="${categoria.id
+                }">Editar</button></td>
+            <td class="hidden"><button class="btn rounded-4xl btn-error text-white btn-eliminar" data-categoria-id-delete="${categoria.id
+                }">Eliminar</button></td>
          
         </tr>
     `
@@ -169,11 +165,9 @@ document
     .getElementById("submitFormCategoria")
     .addEventListener("click", function () {
         const nombreInput = document.getElementById("nombre");
-        let nombre = nombreInput.value
-        
-        nombre = nombre.toLowerCase().replace(/\s+/g, '');
-        
-        // Validación de campo vacío
+        let nombre = nombreInput.value.trim().toLowerCase();
+
+        // Validacion
         if (!nombre) {
             document.getElementById("errorNombre").textContent = "El nombre es requerido.";
             nombreInput.classList.add("input-error");
@@ -268,8 +262,7 @@ function actualizarEstadoCategoria(categoriaId, estado) {
         .then((response) => response.json())
         .then((data) => {
             showToast(
-                `Categoría ${
-                    estado ? "activada" : "desactivada"
+                `Categoría ${estado ? "activada" : "desactivada"
                 } con éxito`,
                 "success"
             );
