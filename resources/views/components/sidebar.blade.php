@@ -37,6 +37,12 @@
                 </a>
             </li>
             <li>
+                <a href="/clientes"
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
+                    <i class="fas fa-users"></i> Clientes
+                </a>
+            </li>
+            <li>
                 <button onclick="id_modal_logout.showModal()"
                     class="flex items-center gap-x-3 py-3 px-4 text-lg text-[#FF5252] rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
                     🔓 Logout

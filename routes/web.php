@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PeliculaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
         return view('admin.categoria');
     });
 
+    Route::get('/clientes', function () {
+        return view('admin.clientes');
+    });
+
     // Rutas para la API de usuarios
     Route::get('/get-usuarios', [UserController::class, 'index']); // Obtener todos los usuarios
     Route::get('/get-usuarios/{id}', [UserController::class, 'show']); // Obtener un usuario por ID
@@ -78,5 +83,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/put-categorias/{id}', [CategoriaController::class, 'update']); // Actualizar una categoría
     Route::delete('/delete-categorias/{id}', [CategoriaController::class, 'destroy']); // Eliminar una categoría
     Route::patch('/categoria/{id}/estado', [CategoriaController::class, 'updateStatus'])->name('categoria.updateStatus');
+
+    Route::get('/get-clientes', [ClientController::class, 'index']); // Obtener todos los clientes
+    Route::get('/get-clientes/{id}', [ClientController::class, 'show']); // Obtener un cliente por ID
+    Route::post('/post-clientes', [ClientController::class, 'store']); // Crear un nuevo cliente
+    Route::put('/put-clientes/{id}', [ClientController::class, 'update']); // Actualizar un cliente
+    Route::delete('/delete-clientes/{id}', [ClientController::class, 'destroy']); // Eliminar un cliente
+    Route::patch('/put-clientes/{id}/estado', [ClientController::class, 'changeStatus']); // Cambiar el estado de un cliente
 
 });

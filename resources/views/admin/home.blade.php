@@ -2,11 +2,19 @@
 
 @section('content')
 <div>
+    <div id="descargando" class="fixed hidden w-full flex-col gap-4 h-screen bg-black/60 sdssd top-0 left-0 z-50  justify-center items-center">
+        <span class="loading loading-spinner text-info w-20"></span>
+
+        <span class="text-2xl text-white">
+            Descargando Registros...
+
+        </span>
+    </div>
     <div class="flex flex-col gap-5 my-3">
 
         <div class="top-0 sticky z-30 bg-white p-3 mb-2 rounded">
             <div class="flex justify-between items-end ">
-{{-- 
+                {{--
                 <h1 class="text-lg text-success mr-5">Peliculas</h1> --}}
                 <div class="flex justify-center gap-3">
                     <div class="relative flex gap-2">
@@ -17,10 +25,11 @@
 
                     <input type="text" id="searchInput" class="input input-bordered min-w-40"
                         placeholder="Buscar nombre, descripcion" />
-                        <select id="categoryFilter" class="input input-bordered min-w-40" placeholder="Filtrar por categoría">
-                            <option value="">Seleccionar categoría</option>
-                        </select>
-                        
+                    <select id="categoryFilter" class="input input-bordered min-w-40"
+                        placeholder="Filtrar por categoría">
+                        <option value="">Seleccionar categoría</option>
+                    </select>
+
                     <div>
                         <button id="BtnExcell" class="btn btn-success"><i class="fas fa-download"></i>
                             Excell</button>
@@ -37,10 +46,10 @@
                                 <i class="fas fa-shopping-cart"></i>
                             </label>
                         </div>
-                    
+
                         <div class="drawer-side pr-4">
                             <label for="CarId" aria-label="close sidebar" class="drawer-overlay"></label>
-                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-[90%] w-80 p-4">
+                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                                 <!-- Dynamic list content will be added here -->
                             </ul>
                         </div>
@@ -89,6 +98,6 @@
             </div>
         </div>
     </dialog>
-    
+
 </div>
 @endsection

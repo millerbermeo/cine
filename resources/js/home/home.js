@@ -227,86 +227,87 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     document.getElementById("BtnExcell").addEventListener("click", async function () {
-        const searchInput = document.getElementById("searchInput");  // Asegúrate de que este ID exista en el HTML
-        const fecha1Input = document.getElementById("fecha1");  // Asegúrate de que este ID exista en el HTML
-        const fecha2Input = document.getElementById("fecha2");  // Asegúrate de que este ID exista en el HTML
+        const searchInput = document.getElementById("searchInput");
+        const fecha1Input = document.getElementById("fecha1");
+        const fecha2Input = document.getElementById("fecha2");
         const categoryFilter = document.getElementById("categoryFilter");
-
+    
         const searchTerm = searchInput.value.trim().toLowerCase();
         const fecha1 = fecha1Input.value;
         const fecha2 = fecha2Input.value;
-        const categoria = categoryFilter.value;  // Capturamos el valor de la categoría
-
-
-
+        const categoria = categoryFilter.value;
+    
         let page = 1;
         let peliculas = [];
         let totalPeliculas = 0;
-        let totalPages = 1;  // Comenzamos con 1 página
-
+        let totalPages = 1;
+    
+        const loadingContainer = document.getElementById("descargando"); // Contenedor de carga
+    
         try {
             let url = `/get-peliculas?export=true&page=${page}`;
-
+    
             if (searchTerm) {
                 url += `&search=${searchTerm}`;
             }
             if (fecha1 && fecha2) {
                 url += `&fecha1=${fecha1}&fecha2=${fecha2}`;
             }
-
-            if (categoria) {  // Añadimos la categoría seleccionada a la URL
+            if (categoria) {
                 url += `&categoria=${categoria}`;
             }
-
+    
+            // Mostrar contenedor de carga
+            loadingContainer.classList.remove("hidden");
+    
             while (page <= totalPages) {
                 const response = await fetch(url);
                 const data = await response.json();
-
+    
                 if (data.data) {
-                    peliculas = peliculas.concat(data.data); // Agregar películas del lote actual
-                    totalPages = data.last_page; // Número total de páginas
-                    page++; // Incrementamos la página
+                    peliculas = peliculas.concat(data.data);
+                    totalPages = data.last_page;
+                    page++;
                     url = `/get-peliculas?export=true&page=${page}&categoria=${categoria}`;
                 } else {
                     showToast("No hay más datos para exportar.");
                     break;
                 }
             }
-
+    
             if (!peliculas || peliculas.length === 0) {
                 showToast("No hay datos para exportar.");
                 return;
             }
-
+    
             let archivos = [];
-
-            // Generar los archivos Excel por lotes de 50
+    
             for (let i = 0; i < peliculas.length; i += 50) {
                 const batch = peliculas.slice(i, i + 50);
-
+    
                 const workbook = new ExcelJS.Workbook();
                 const worksheet = workbook.addWorksheet("Películas");
-
+    
                 worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
-
+    
                 batch.forEach((pelicula) => {
                     worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
                 });
-
+    
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], {
                     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 });
-
+    
                 archivos.push({
                     blob,
                     nombre: `Peliculas_Lote_${Math.floor(i / 50) + 1}.xlsx`,
                 });
             }
-
+    
             // Descargar los archivos generados
-            // Descargar los archivos generados con un retraso entre cada descarga
-            archivos.forEach((archivo, index) => {
+            for (let i = 0; i < archivos.length; i++) {
+                const archivo = archivos[i];
                 setTimeout(() => {
                     const a = document.createElement("a");
                     a.href = URL.createObjectURL(archivo.blob);
@@ -314,15 +315,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
-                }, index * 1000); // Retraso de 1 segundo entre descargas
-            });
-
+                    if (i === archivos.length - 1) {
+                        // Ocultar contenedor de carga cuando todas las descargas hayan terminado
+                        loadingContainer.classList.add("hidden");
+                    }
+                }, i * 1000); // Retraso de 1 segundo entre descargas
+            }
+    
         } catch (error) {
             console.error("Error al exportar las películas:", error);
             showToast("Hubo un error al exportar las películas.");
+            loadingContainer.classList.add("hidden"); // Ocultar contenedor de carga en caso de error
         }
     });
-
+    
 
 
     function cargarCarrito() {

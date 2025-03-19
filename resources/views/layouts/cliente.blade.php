@@ -33,7 +33,9 @@ session_start();
         </div>
     </div>
 
-    @vite('resources/js/categorias/categorias.js')
+
+    @vite('resources/js/clientes/clientes.js')
+
 </body>
 
 </html>
