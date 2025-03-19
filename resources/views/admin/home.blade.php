@@ -3,12 +3,14 @@
 @section('content')
 <div>
     <div id="descargando" class="fixed hidden w-full flex-col gap-4 h-screen bg-black/60 sdssd top-0 left-0 z-50  justify-center items-center">
-        <span class="loading loading-spinner text-info w-20"></span>
+        <div class="flex flex-col justify-center items-center gap-4 h-full w-full">
+            <span class="loading loading-spinner text-info w-20"></span>
 
         <span class="text-2xl text-white">
             Descargando Registros...
 
         </span>
+        </div>
     </div>
     <div class="flex flex-col gap-5 my-3">
 
