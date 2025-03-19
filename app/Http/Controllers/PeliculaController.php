@@ -52,9 +52,15 @@ class PeliculaController extends Controller
     
         // Filtrar por categoría (si se pasa una categoría)
         if ($request->has('categoria') && $categoria = $request->categoria) {
-            $categoria = strtolower($categoria); // Asegúrate de comparar sin distinción de mayúsculas/minúsculas
-            $query->whereRaw('LOWER(categoria) = ? AND year BETWEEN ? AND ?', [$categoria, $request->fecha1, $request->fecha2]);
+            $categoria = strtolower($categoria);
+            $query->whereRaw('LOWER(categoria) = ?', [$categoria]);
+        
+            // Solo aplicar el filtro de año si ambas fechas existen
+            if ($request->has('fecha1') && $request->has('fecha2')) {
+                $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
+            }
         }
+        
     
         // Si es exportación, obtener todos los resultados en lotes
         if ($export) {
