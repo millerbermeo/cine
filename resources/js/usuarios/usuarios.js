@@ -87,7 +87,8 @@ const renderTable = () => {
                     (user.telefono && user.telefono.toString().toLowerCase().includes(word)) ||
                     (user.direccion && user.direccion.toLowerCase().includes(word)) ||
                     (user.sexo && user.sexo.toLowerCase().includes(word)) ||
-                    (user.nacionalidad && user.nacionalidad.toLowerCase().includes(word))
+                    (user.nacionalidad && user.nacionalidad.toLowerCase().includes(word)) ||
+                    (user.estado && user.estado.toLowerCase().includes(word))
                 );
             });
         });
@@ -297,7 +298,7 @@ document.getElementById("submitForm").addEventListener("click", function () {
     // Validación de teléfono
     if (!telefono || !regexTelefono.test(telefono)) {
         document.getElementById("telefono").classList.add("input-error");
-        document.getElementById("telefonoError").innerHTML = '<p class="text-error">El teléfono debe contener entre 7 y 10 dígitos.</p>';
+        document.getElementById("telefonoError").innerHTML = '<p class="text-error">El teléfono debe contener numeros entre 7 y 10 dígitos.</p>';
         isValid = false;
     } else {
         document.getElementById("telefono").classList.remove("input-error");

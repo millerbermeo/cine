@@ -37,10 +37,17 @@ const renderTable = () => {
     const searchValue = document
         .getElementById("searchInput")
         .value.toLowerCase();
-    const filteredCategorias = categorias.filter((categoria) =>
-        categoria.nombre.toLowerCase().includes(searchValue) ||
-        categoria.estado.toLowerCase().includes(searchValue)
-    );
+        const filteredCategorias = categorias.filter((categoria) => {
+            const searchWords = searchValue.toLowerCase().split(' ').filter(Boolean); // Convierte el término de búsqueda en un array de palabras
+        
+            // Verifica que todas las palabras de búsqueda estén presentes en el nombre o estado de la categoría
+            const matchesSearchTerm = searchWords.every(word =>
+                categoria.nombre.toLowerCase().includes(word)
+            );
+        
+            return matchesSearchTerm;
+        });
+        
 
     const start = (currentPage - 1) * limit;
     const paginatedCategorias = filteredCategorias.slice(start, start + limit);

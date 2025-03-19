@@ -16,7 +16,7 @@
                     </div>
 
                     <input type="text" id="searchInput" class="input input-bordered min-w-40"
-                        placeholder="Buscar nombre, categoria, descripcion, año..." />
+                        placeholder="Buscar nombre, descripcion" />
                         <select id="categoryFilter" class="input input-bordered min-w-40" placeholder="Filtrar por categoría">
                             <option value="">Seleccionar categoría</option>
                         </select>
@@ -85,7 +85,7 @@
             <h3 class="text-lg font-bold text-center mb-5">Confirmar Venta</h3>
             <div class="modal-action flex justify-center">
                 <button id="btn-cerrar-carrito" class="btn btn-gray">Cancelar</button>
-                <button id="btn-confirmar-carrito" class="btn btn-error text-white">Confirmar Venta</button>
+                <button id="btn-confirmar-carrito" class="btn btn-success text-white">Confirmar Venta</button>
             </div>
         </div>
     </dialog>

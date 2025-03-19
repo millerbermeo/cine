@@ -54,12 +54,22 @@ const renderTable = () => {
         .getElementById("searchInput")
         .value.toLowerCase();
 
-    const filteredPeliculas = peliculas.filter((pelicula) =>
-        pelicula.nombre.toLowerCase().includes(searchValue) ||
-        pelicula.descripcion.toLowerCase().includes(searchValue) ||
-        pelicula.categoria.toLowerCase().includes(searchValue)
-        // pelicula.year.toLowerCase().includes(searchValue)
-    );
+        const filteredPeliculas = peliculas.filter((pelicula) => {
+            const searchWords = searchValue.toLowerCase().split(' ').filter(Boolean); // Convierte el término de búsqueda en un array de palabras
+        
+            // Verifica que todas las palabras de búsqueda estén presentes en el nombre, descripción, categoría, etc.
+            const matchesSearchTerm = searchWords.every(word =>
+                pelicula.nombre.toLowerCase().includes(word) ||
+                pelicula.descripcion.toLowerCase().includes(word) ||
+                pelicula.categoria.toLowerCase().includes(word) ||
+                pelicula.year.toLowerCase().includes(word) ||
+                pelicula.estado.toLowerCase().includes(word)||
+                pelicula.precio.toLowerCase().includes(word)
+            );
+        
+            return matchesSearchTerm;
+        });
+        
 
     const start = (currentPage - 1) * limit;
     const paginatedPeliculas = filteredPeliculas.slice(start, start + limit);

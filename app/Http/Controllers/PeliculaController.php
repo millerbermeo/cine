@@ -28,6 +28,7 @@ class PeliculaController extends Controller
     
     //     return response()->json($peliculas);
     // }
+    
     public function index(Request $request)
     {
         // Si se solicita una exportación, no aplicar paginación
@@ -40,7 +41,6 @@ class PeliculaController extends Controller
             $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
         }
     
-        // Filtrar por búsqueda (nombre, descripción, o categoría) solo sobre el resultado filtrado por año
         if ($request->has('search') && $search = $request->search) {
             $search = strtolower($search);
             $query->where(function ($q) use ($search) {
@@ -50,7 +50,6 @@ class PeliculaController extends Controller
             });
         }
     
-        // Filtrar por categoría (si se pasa una categoría)
         if ($request->has('categoria') && $categoria = $request->categoria) {
             $categoria = strtolower($categoria);
             $query->whereRaw('LOWER(categoria) = ?', [$categoria]);
@@ -61,7 +60,6 @@ class PeliculaController extends Controller
             }
         }
         
-    
         // Si es exportación, obtener todos los resultados en lotes
         if ($export) {
             $perPage = 50; // Lote de 50 registros
@@ -75,10 +73,6 @@ class PeliculaController extends Controller
             return response()->json($peliculas);
         }
     }
-    
-    
-    
-    
     
     // public function index2()
     // {
