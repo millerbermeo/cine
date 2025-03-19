@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             <div class="card card-side border-gray-300 border bg-base-100 shadow max-h-[130px] duration-500 transition-all">
                 <figure>
                     <img class="${pelicula.foto ? "" : "hidden"
-                    } w-[120px] bg-white object-fill h-full" src="storage/${pelicula.foto
+                    } w-[80px] bg-white object-fill h-full" src="storage/${pelicula.foto
                     }" />
                 </figure>
                 <div class="card-body p-2">
@@ -350,7 +350,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const li = document.createElement("div");
                 li.classList.add("card", "card-side", "border-gray-300", "border-b-[1px]", "bg-white", "mb-2", "p-1", "rounded-none");
                 li.innerHTML = `
-                <figure><img class="w-[50px] h-[50px]  object-cover rounded-full" src="storage/${pelicula.foto}" alt="${pelicula.nombre}" /></figure>
+                <figure><img class="w-[40px] h-[40px]  object-cover rounded-full" src="storage/${pelicula.foto}" alt="${pelicula.nombre}" /></figure>
                 <div class="card-body p-2">
                     <h2 class="card-title text-xs uppercase">${pelicula.nombre}</h2>
                     <p class="text-black font-normal text-xs">${formatearNumero(pelicula.precio)} X ${pelicula.cantidad}</p>
