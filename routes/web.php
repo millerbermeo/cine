@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PeliculaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,6 +61,10 @@ Route::middleware('auth')->group(function () {
         return view('admin.clientes');
     });
 
+    Route::get('/ventas', function () {
+        return view('admin.ventas');
+    });
+
     // Rutas para la API de usuarios
     Route::get('/get-usuarios', [UserController::class, 'index']); // Obtener todos los usuarios
     Route::get('/get-usuarios/{id}', [UserController::class, 'show']); // Obtener un usuario por ID
@@ -91,4 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/delete-clientes/{id}', [ClientController::class, 'destroy']); // Eliminar un cliente
     Route::patch('/put-clientes/{id}/estado', [ClientController::class, 'changeStatus']); // Cambiar el estado de un cliente
 
+
+    Route::get('/get-ventas', [VentaController::class, 'index']);
+    Route::post('/post-ventas', [VentaController::class, 'store']);
 });

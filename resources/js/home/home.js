@@ -524,14 +524,65 @@ function actualizarColoresTarjetas() {
     
     // Event listeners para cerrar el modal
     document.getElementById("btn-cerrar-carrito").addEventListener("click", cerrarModal);
-    document.getElementById("btn-confirmar-carrito").addEventListener("click", () => {
-        localStorage.clear();
-        console.log("Venta confirmada");
-        actualizarColoresTarjetas(); // 🔴 Asegura que se deseleccionen todas las tarjetas
 
+
+    document.getElementById("btn-confirmar-carrito").addEventListener("click", () => {
+
+        actualizarColoresTarjetas(); // 🔴 Asegura que se deseleccionen todas las tarjetas
+        confirmarVenta()
         cargarCarrito();
-        cerrarModal();
+      
     });
+
+
+    function confirmarVenta() {
+        const clienteId = $('#cliente_select').val().trim();  // Cliente seleccionado
+        
+        if (!clienteId) {
+            showToast("Por favor, selecciona un cliente antes de confirmar la venta.","error");
+            return;
+        }
+    
+        const peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+    
+        if (peliculasEnCarrito.length === 0) {
+            showToast("El carrito está vacío.", "error");
+            return;
+        }
+    
+        const vendedorId = 1;  
+        const productos = peliculasEnCarrito.map(pelicula => ({
+            pelicula_id: pelicula.id,
+            cantidad: pelicula.cantidad
+        }));
+    
+        const datosVenta = {
+            cliente_id: clienteId,
+            vendedor_id: vendedorId,
+            productos: productos
+        };
+    
+        $.ajax({
+            url: '/post-ventas',
+            method: 'POST',
+            data: datosVenta,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                showToast('Venta confirmada', "success");
+                localStorage.clear();
+                cerrarModal();
+                cargarCarrito();
+            },
+            // error: function (error) {
+            //     alert('Hubo un error al confirmar la venta');
+            //     console.error(error);
+            // }
+        });
+    }
+    
+    
     
     // Cargar el carrito al iniciar
     window.onload = cargarCarrito;
@@ -623,12 +674,74 @@ function actualizarColoresTarjetas() {
             }
         });
     }
+
+    function limpiarFormulario(formId) {
+        $(`${formId} input`).val(""); // Limpia todos los inputs del formulario
+        $(`${formId} .error`).remove(); // Elimina los mensajes de error
+        $(`${formId} input`).removeClass("border border-red-500"); // Quita el borde rojo de los campos
+    }
     
-    // Enviar los datos para crear un nuevo cliente
+
+    function validarCampo(id, mensajeError) {
+        const campo = $(id);
+        const valor = campo.val().trim();
+        if (!valor) {
+            campo.addClass("border border-red-500");
+            campo.next(".error").remove();
+            campo.after(`<span class="error text-red-500 text-sm">${mensajeError}</span>`);
+            return false;
+        } else {
+            campo.removeClass("border border-red-500");
+            campo.next(".error").remove();
+            return true;
+        }
+    }
+
+    function validarEmail(id) {
+        const campo = $(id);
+        const valor = campo.val().trim();
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (valor && !regexEmail.test(valor)) {
+            campo.addClass("border border-red-500");
+            campo.next(".error").remove();
+            campo.after(`<span class="error text-red-500 text-sm">Correo inválido</span>`);
+            return false;
+        } else {
+            campo.removeClass("border border-red-500");
+            campo.next(".error").remove();
+            return true;
+        }
+    }
+
+    function validarTelefono(id) {
+        const campo = $(id);
+        const valor = campo.val().trim();
+        const regexTelefono = /^[0-9]{7,15}$/;
+        if (valor && !regexTelefono.test(valor)) {
+            campo.addClass("border border-red-500");
+            campo.next(".error").remove();
+            campo.after(`<span class="error text-red-500 text-sm">Teléfono inválido</span>`);
+            return false;
+        } else {
+            campo.removeClass("border border-red-500");
+            campo.next(".error").remove();
+            return true;
+        }
+    }
+
+    // Validación al enviar formulario de nuevo cliente
     $("#nuevoClienteForm").on("submit", function (e) {
         e.preventDefault();
+
+        const valido = validarCampo("#nombre_nuevo", "El nombre es obligatorio") &&
+                       validarCampo("#tipo_documento_nuevo", "Seleccione un tipo de documento") &&
+                       validarCampo("#numero_documento_nuevo", "El número de documento es obligatorio") &&
+                       validarEmail("#email_nuevo") &&
+                       validarTelefono("#telefono_nuevo");
+
+        if (!valido) return;
+
         const token = $('meta[name="csrf-token"]').attr('content');
-    
         const nuevoCliente = {
             nombre: $("#nombre_nuevo").val(),
             tipo_documento: $("#tipo_documento_nuevo").val(),
@@ -636,26 +749,62 @@ function actualizarColoresTarjetas() {
             email: $("#email_nuevo").val(),
             telefono: $("#telefono_nuevo").val()
         };
-    
+
         $.ajax({
             url: '/post-clientes',
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': token  // Agregar token CSRF en los encabezados correctamente
-            },
+            headers: { 'X-CSRF-TOKEN': token },
             data: nuevoCliente,
             success: function (data) {
-                alert('Cliente creado exitosamente');
+                showToast('Cliente creado exitosamente', 'success');
                 obtenerCliente(data.id);
-            },
-            error: function () {
-                alert('Error al crear el cliente');
+                limpiarFormulario("#nuevoClienteForm"); // Limpia el formulario después de la creación
             }
         });
     });
 
+    // Validación al enviar formulario de actualización
+    $("#clienteForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const valido = validarCampo("#nombre", "El nombre es obligatorio") &&
+                       validarCampo("#tipo_documento", "Seleccione un tipo de documento") &&
+                       validarCampo("#numero_documento", "El número de documento es obligatorio") &&
+                       validarEmail("#email") &&
+                       validarTelefono("#telefono");
+
+        if (!valido) return;
+
+        const token = $('meta[name="csrf-token"]').attr('content');
+        const clienteId = $("#cliente_select").val();
+        const clienteActualizado = {
+            nombre: $("#nombre").val(),
+            tipo_documento: $("#tipo_documento").val(),
+            numero_documento: $("#numero_documento").val(),
+            email: $("#email").val(),
+            telefono: $("#telefono").val()
+        };
+
+        $.ajax({
+            url: `/put-clientes/${clienteId}`,
+            method: 'PUT',
+            headers: { 'X-CSRF-TOKEN': token },
+            data: clienteActualizado,
+            success: function (data) {
+                showToast('Cliente actualizado exitosamente', 'success');
+                // obtenerCliente(clienteId);
+                limpiarFormulario("#clienteForm"); // Limpia el formulario después de la creación
+
+                
+            }
+        });
+    });
+
+    
+
     $("#btn-buscar-cliente").on("click", function() {
         mostrarFormulario('buscar');
+        limpiarFormulario("#clienteForm");
     });
     $("#btn-registrar-cliente").on("click", function() {
         mostrarFormulario('registrar');
@@ -666,6 +815,8 @@ function actualizarColoresTarjetas() {
         const modal = document.getElementById("modal_confirmar_carrito");
         modal.classList.add('hidden');
     });
+
+    
 
     function mostrarFormulario(tipo) {
         if (tipo === 'buscar') {

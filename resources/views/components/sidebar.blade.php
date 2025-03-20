@@ -37,9 +37,15 @@
                 </a>
             </li>
             <li>
+                <a href="/ventas"
+                    class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </a>
+            </li>
+            <li>
                 <a href="/clientes"
                     class="nav-item flex items-center gap-x-3 py-3 px-4 text-lg text-gray-800 rounded-lg hover:bg-success hover:text-[#ffffff] transition-all duration-200">
-                    <i class="fas fa-users"></i> Clientes
+                    <i class="fas fa-user"></i> Clientes
                 </a>
             </li>
             <li>

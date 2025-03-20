@@ -24,4 +24,9 @@ class Pelicula extends Model
         'estado' => 'activo', // Valor por defecto
         'precio' => 10000, // Valor por defecto
     ];
+
+    public function productosVentas()
+    {
+        return $this->hasMany(ProductoVenta::class);
+    }
 }

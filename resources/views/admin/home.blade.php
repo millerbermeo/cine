@@ -127,24 +127,33 @@
                         <div class="mb-4">
                             <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
                             <input type="text" id="nombre" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_nombre" class="text-red-500 text-sm hidden"></p>
                         </div>
                         <div class="mb-4">
                             <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
                             <input type="text" id="tipo_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_tipo_documento" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="numero_documento" class="block text-sm font-medium text-gray-700">Número de Documento</label>
                             <input type="text" id="numero_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_numero_documento" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
                             <input type="email" id="email" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_email" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
                             <input type="text" id="telefono" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_telefono" class="text-red-500 text-sm hidden"></p>
+
                         </div>
-                        <button type="button" class="btn btn-outline btn-info w-full">Actulizar Datos</button>
+                        <button type="submit" class="btn btn-outline btn-info w-full">Actulizar Datos</button>
 
                     </form>
                 </div>
@@ -157,24 +166,34 @@
                         <div class="mb-4">
                             <label for="nombre_nuevo" class="block text-sm font-medium text-gray-700">Nombre</label>
                             <input type="text" id="nombre_nuevo" class="input input-bordered w-full bg-base-200 rounded-lg p-2 focus:ring-primary">
+                            <p id="error_nombre" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="tipo_documento_nuevo" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
                             <input type="text" id="tipo_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_tipo_documento" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="numero_documento_nuevo" class="block text-sm font-medium text-gray-700">Número de Documento</label>
                             <input type="text" id="numero_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_numero_documento" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="email_nuevo" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
                             <input type="email" id="email_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_email" class="text-red-500 text-sm hidden"></p>
+
                         </div>
                         <div class="mb-4">
                             <label for="telefono_nuevo" class="block text-sm font-medium text-gray-700">Teléfono</label>
                             <input type="text" id="telefono_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            <p id="error_telefono" class="text-red-500 text-sm hidden"></p>
+
                         </div>
-                        <button type="button" class="btn btn-outline btn-info w-full">Registrar Cliente</button>
+                        <button type="submit" class="btn btn-outline btn-info w-full">Registrar Cliente</button>
                     </form>
                 </div>
         
