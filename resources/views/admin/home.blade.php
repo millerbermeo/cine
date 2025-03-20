@@ -25,6 +25,12 @@
                         <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
                     </div>
 
+                    <div class="relative flex gap-2">
+                        <input id="precioMin" type="number" class="input min-w-24" placeholder="Precio mínimo">
+                        <input id="precioMax" type="number" class="input min-w-24" placeholder="Precio máximo">
+                        <div class="badge badge-accent absolute -top-4 right-3">Enter</div>
+                    </div>
+
                     <input type="text" id="searchInput" class="input input-bordered min-w-40"
                         placeholder="Buscar nombre, descripcion" />
                     <select id="categoryFilter" class="input input-bordered min-w-40"
@@ -42,16 +48,18 @@
 
                     <div class="drawer drawer-end w-20">
                         <input id="CarId" type="checkbox" class="drawer-toggle" />
-                        <div class="drawer-content">
+                        <div class="drawer-content relative">
                             <!-- Page content here -->
                             <label for="CarId" class="drawer-button btn btn-primary">
                                 <i class="fas fa-shopping-cart"></i>
                             </label>
+                            <div id="CantidadItems" class="badge badge-success absolute -top-3 right-1 text-xs"></div>
+
                         </div>
 
                         <div class="drawer-side pr-4">
                             <label for="CarId" aria-label="close sidebar" class="drawer-overlay"></label>
-                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+                            <ul id="cartList" class="menu bg-base-200 text-base-content min-h-full w-80 p-4 py-10">
                                 <!-- Dynamic list content will be added here -->
                             </ul>
                         </div>
@@ -91,15 +99,115 @@
         </div>
     </div>
 
-    <dialog id="modal_confirmar_carrito" class="modal">
-        <div class="modal-box">
-            <h3 class="text-lg font-bold text-center mb-5">Confirmar Venta</h3>
-            <div class="modal-action flex justify-center">
-                <button id="btn-cerrar-carrito" class="btn btn-gray">Cancelar</button>
-                <button id="btn-confirmar-carrito" class="btn btn-success text-white">Confirmar Venta</button>
+ 
+    <div id="modal_confirmar_carrito" class="fixed hidden w-full flex-col gap-4 h-screen bg-black/60 top-0 left-0 z-50 justify-center items-center">
+        <div class="w-[70%] p-6 rounded-xl items-start flex gap-10 bg-white shadow-lg">
+    
+            <div class="w-full">
+                <div class="flex justify-between gap-3 mb-4 flex-wrap">
+                    <button id="btn-buscar-cliente" class="btn btn-info w-full text-white ">Buscar Cliente</button>
+                    <button id="btn-registrar-cliente" class="btn btn-outline btn-success w-full">Registrar Cliente</button>
+                </div>
+        
+                <!-- Formulario para mostrar los datos del cliente -->
+                <div id="form_cliente" class="hidden">
+                    <h4 class="font-normal text-lg mb-4 text-center">Detalles del Cliente</h4>
+                    <div class="divider divide-black">
+
+                    </div>
+                    <form id="clienteForm">
+                        <div class="mb-4 w-full">
+                            <label for="cliente_select" class="block text-sm font-medium text-gray-700">Buscar Cliente</label>
+                            <select id="cliente_select" class="select select-bordered min-w-full w-full focus:ring-primary">
+                                <option value="">Selecciona un cliente...</option>
+                                <!-- Los clientes se cargarán dinámicamente aquí -->
+                            </select>
+                        </div>
+        
+                        <div class="mb-4">
+                            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                            <input type="text" id="nombre" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
+                            <input type="text" id="tipo_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="numero_documento" class="block text-sm font-medium text-gray-700">Número de Documento</label>
+                            <input type="text" id="numero_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                            <input type="email" id="email" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            <input type="text" id="telefono" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <button type="button" class="btn btn-outline btn-info w-full">Actulizar Datos</button>
+
+                    </form>
+                </div>
+        
+                <!-- Formulario para crear un nuevo cliente -->
+                <div id="crear_cliente" class="hidden">
+                    <h4 class="font-normal text-lg mb-4 text-center">Registrar Nuevo Cliente</h4>
+                    <div class="divider divide-black"> </div>
+                    <form id="nuevoClienteForm">
+                        <div class="mb-4">
+                            <label for="nombre_nuevo" class="block text-sm font-medium text-gray-700">Nombre</label>
+                            <input type="text" id="nombre_nuevo" class="input input-bordered w-full bg-base-200 rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="tipo_documento_nuevo" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
+                            <input type="text" id="tipo_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="numero_documento_nuevo" class="block text-sm font-medium text-gray-700">Número de Documento</label>
+                            <input type="text" id="numero_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email_nuevo" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                            <input type="email" id="email_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="telefono_nuevo" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                            <input type="text" id="telefono_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                        </div>
+                        <button type="button" class="btn btn-outline btn-info w-full">Registrar Cliente</button>
+                    </form>
+                </div>
+        
+                {{-- <div class="modal-action flex justify-center gap-4 mt-5">
+                    <button id="btn-cerrar-carrito" class="btn btn-outline btn-gray" onclick="cerrarModal()">Cancelar</button>
+                    <button id="btn-confirmar-carrito" class="btn btn-success text-white w-full md:w-auto">Confirmar Venta</button>
+                </div> --}}
             </div>
+
+
+
+            <div class="w-full">
+                <div id="DatosPrevios" class="w-full">
+
+                </div>
+
+                <div class="modal-action flex justify-end gap-4 mt-5 w-full">
+                    <button type="button" id="btn-cerrar-carrito" class="btn btn-outline btn-gray" onclick="cerrarModal()">Cancelar</button>
+                    <button type="button" id="btn-confirmar-carrito" class="btn btn-success text-white w-full md:w-auto">Confirmar Venta</button>
+                </div>
+            </div>
+
+
         </div>
-    </dialog>
+    </div>
+    
+    
+    
+    
+    
+    
 
 </div>
 @endsection
+
+

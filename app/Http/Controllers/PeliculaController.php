@@ -28,19 +28,65 @@ class PeliculaController extends Controller
     
     //     return response()->json($peliculas);
     // }
+
+    // public function index(Request $request)
+    // {
+    //     // Si se solicita una exportación, no aplicar paginación
+    //     $export = $request->has('export') && $request->export === 'true';
     
+    //     $query = Pelicula::orderBy('year', 'asc');
+    
+    //     // Filtrar por rango de años si se pasan fecha1 y fecha2
+    //     if ($request->has('fecha1') && $request->has('fecha2')) {
+    //         $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
+    //     }
+    
+    //     if ($request->has('search') && $search = $request->search) {
+    //         $search = strtolower($search);
+    //         $query->where(function ($q) use ($search) {
+    //             $q->whereRaw('LOWER(nombre) LIKE ?', ["%{$search}%"])
+    //               ->orWhereRaw('LOWER(descripcion) LIKE ?', ["%{$search}%"])
+    //               ->orWhereRaw('LOWER(categoria) = ?', [$search]);
+    //         });
+    //     }
+    
+    //     if ($request->has('categoria') && $categoria = $request->categoria) {
+    //         $categoria = strtolower($categoria);
+    //         $query->whereRaw('LOWER(categoria) = ?', [$categoria]);
+        
+    //         // Solo aplicar el filtro de año si ambas fechas existen
+    //         if ($request->has('fecha1') && $request->has('fecha2')) {
+    //             $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
+    //         }
+    //     }
+        
+    //     // Si es exportación, obtener todos los resultados en lotes
+    //     if ($export) {
+    //         $perPage = 50; // Lote de 50 registros
+    //         $peliculas = $query->paginate($perPage);
+    
+    //         return response()->json($peliculas);
+    //     } else {
+    //         // Si no es exportación, aplicar paginación normal
+    //         $perPage = 20;
+    //         $peliculas = $query->paginate($perPage);
+    //         return response()->json($peliculas);
+    //     }
+    // }
+
     public function index(Request $request)
     {
         // Si se solicita una exportación, no aplicar paginación
         $export = $request->has('export') && $request->export === 'true';
-    
+        
         $query = Pelicula::orderBy('year', 'asc');
-    
+        
         // Filtrar por rango de años si se pasan fecha1 y fecha2
         if ($request->has('fecha1') && $request->has('fecha2')) {
             $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
         }
-    
+        
+        // Filtro por nombre, descripción o categoría
         if ($request->has('search') && $search = $request->search) {
             $search = strtolower($search);
             $query->where(function ($q) use ($search) {
@@ -50,16 +96,22 @@ class PeliculaController extends Controller
             });
         }
     
+        // Filtro por categoría
         if ($request->has('categoria') && $categoria = $request->categoria) {
             $categoria = strtolower($categoria);
             $query->whereRaw('LOWER(categoria) = ?', [$categoria]);
-        
+    
             // Solo aplicar el filtro de año si ambas fechas existen
             if ($request->has('fecha1') && $request->has('fecha2')) {
                 $query->whereBetween('year', [$request->fecha1, $request->fecha2]);
             }
         }
-        
+    
+        // Filtro por rango de precios
+        if ($request->has('precio_min') && $request->has('precio_max')) {
+            $query->whereBetween('precio', [$request->precio_min, $request->precio_max]);
+        }
+    
         // Si es exportación, obtener todos los resultados en lotes
         if ($export) {
             $perPage = 50; // Lote de 50 registros

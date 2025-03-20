@@ -3,6 +3,10 @@ import { showToast } from "../toast";
 
 document.addEventListener("DOMContentLoaded", async function () {
     listarCategoriasSelect()
+    mostrarCantidadPeliculas();
+    actualizarColoresTarjetas(); // Asegura que las tarjetas se actualicen al cargar la página
+
+
     let currentPage = 1;
     let allPeliculas = []; // Array para almacenar todas las películas cargadas
     const peliculasContainer = document.getElementById("peliculasContainer");
@@ -13,15 +17,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     const fecha1Input = document.getElementById("fecha1");
     const fecha2Input = document.getElementById("fecha2");
     const categoryFilter = document.getElementById("categoryFilter");
+    const precioMinInput = document.getElementById("precioMin");
+    const precioMaxInput = document.getElementById("precioMax");
 
 
-    async function fetchPeliculas(page, fecha1 = "", fecha2 = "") {
+    async function fetchPeliculas(page, fecha1 = "", fecha2 = "", precioMin = "", precioMax = "") {
         try {
             loader.classList.remove("hidden");
 
             let url = `/get-peliculas?page=${page}`;
             if (fecha1 && fecha2) {
                 url += `&fecha1=${fecha1}&fecha2=${fecha2}`;
+            }
+
+            // Agregar los parámetros de precio solo si se han definido
+            if (precioMin && precioMax) {
+                url += `&precio_min=${precioMin}&precio_max=${precioMax}`;
             }
 
             const response = await fetch(url);
@@ -42,8 +53,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 updatePeliculas(allPeliculas);
             }
 
-
-
             // Desplazar al último elemento
             const lastElement = peliculasContainer.lastElementChild;
             if (lastElement) {
@@ -60,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             loader.classList.add("hidden");
         }
     }
+
     // Evento para cargar más películas
     loadMoreBtn.addEventListener("click", () => {
         currentPage++;
@@ -69,8 +79,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Evento para filtrar por fechas cuando cambian los inputs
     function applyFilters() {
         currentPage = 1; // Reiniciar la paginación
-        fetchPeliculas(currentPage, fecha1Input.value, fecha2Input.value);
+        const precioMin = precioMinInput.value; // Obtener el valor de precio mínimo
+        const precioMax = precioMaxInput.value; // Obtener el valor de precio máximo
+
+        // Agregar console.log para verificar los valores de los filtros
+        console.log("Precio Mínimo:", precioMin);
+        console.log("Precio Máximo:", precioMax);
+
+        // Llamar a fetchPeliculas con los filtros aplicados
+        fetchPeliculas(currentPage, fecha1Input.value, fecha2Input.value, precioMin, precioMax);
     }
+
+
+    precioMinInput.addEventListener("change", applyFilters);
+    precioMaxInput.addEventListener("change", applyFilters);
+
 
     fecha1Input.addEventListener("change", applyFilters);
     fecha2Input.addEventListener("change", applyFilters);
@@ -123,6 +146,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function updatePeliculas(filteredPeliculas) {
+        actualizarColoresTarjetas()
         peliculasContainer.innerHTML = filteredPeliculas
             .map(
                 (pelicula) => `
@@ -155,6 +179,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         `
             )
             .join("");
+            actualizarColoresTarjetas(); // Llamar después de actualizar el carrito
+
     }
 
 
@@ -211,41 +237,81 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Cambiar el id del botón BtnCar a una clase común como 'btnCar'
     peliculasContainer.addEventListener("click", function (event) {
-
         if (event.target.classList.contains("btnCar")) {
             const peliculaData = event.target.getAttribute("data-pelicula");
-            const pelicula = JSON.parse(peliculaData);  // Convierte el string JSON de vuelta a objeto
-
-            // Almacena la película en localStorage
-            let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || []; // Obtener el carrito, o un array vacío si no existe
-            peliculasEnCarrito.push(pelicula); // Agregar la nueva película
-            localStorage.setItem("peliculasCarrito", JSON.stringify(peliculasEnCarrito)); // Guardar el carrito actualizado
-            cargarCarrito()
+            const pelicula = JSON.parse(peliculaData);
+    
+            let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+    
+            // Buscar si la película ya está en el carrito
+            const peliculaExistente = peliculasEnCarrito.find(p => p.id === pelicula.id);
+    
+            if (peliculaExistente) {
+                peliculaExistente.cantidad += 1;
+            } else {
+                pelicula.cantidad = 1;
+                peliculasEnCarrito.push(pelicula);
+            }
+    
+            // Guardar en localStorage
+            localStorage.setItem("peliculasCarrito", JSON.stringify(peliculasEnCarrito));
+    
+            // Recargar el carrito en la UI
+            cargarCarrito();
+    
+            // Actualizar el color de la tarjeta
+            actualizarColoresTarjetas();
+    
             showToast("Película añadida al carrito", "success");
         }
     });
+    
+function actualizarColoresTarjetas() {
+    let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+
+    document.querySelectorAll(".card").forEach(card => {
+        const btn = card.querySelector(".btnCar");
+        if (!btn) return;
+
+        try {
+            const peliculaData = JSON.parse(btn.getAttribute("data-pelicula"));
+            const enCarrito = peliculasEnCarrito.some(p => p.id === peliculaData.id);
+
+            if (enCarrito) {
+                card.classList.add("bg-green-200"); // Mantiene el color si está en el carrito
+            } else {
+                card.classList.remove("bg-green-200"); // Lo quita si ya no está en el carrito
+            }
+        } catch (error) {
+            console.error("Error al procesar la tarjeta:", error);
+        }
+    });
+}
+    
+
+    
 
     document.getElementById("BtnExcell").addEventListener("click", async function () {
         const searchInput = document.getElementById("searchInput");
         const fecha1Input = document.getElementById("fecha1");
         const fecha2Input = document.getElementById("fecha2");
         const categoryFilter = document.getElementById("categoryFilter");
-    
+
         const searchTerm = searchInput.value.trim().toLowerCase();
         const fecha1 = fecha1Input.value;
         const fecha2 = fecha2Input.value;
         const categoria = categoryFilter.value;
-    
+
         let page = 1;
         let peliculas = [];
         let totalPeliculas = 0;
         let totalPages = 1;
-    
+
         const loadingContainer = document.getElementById("descargando"); // Contenedor de carga
-    
+
         try {
             let url = `/get-peliculas?export=true&page=${page}`;
-    
+
             if (searchTerm) {
                 url += `&search=${searchTerm}`;
             }
@@ -255,14 +321,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (categoria) {
                 url += `&categoria=${categoria}`;
             }
-    
+
             // Mostrar contenedor de carga
             loadingContainer.classList.remove("hidden");
-    
+
             while (page <= totalPages) {
                 const response = await fetch(url);
                 const data = await response.json();
-    
+
                 if (data.data) {
                     peliculas = peliculas.concat(data.data);
                     totalPages = data.last_page;
@@ -273,34 +339,34 @@ document.addEventListener("DOMContentLoaded", async function () {
                     break;
                 }
             }
-    
+
             if (!peliculas || peliculas.length === 0) {
                 showToast("No hay datos para exportar.");
                 return;
             }
-    
+
             let archivo; // Variable para almacenar el archivo único
-    
+
             // Crear el archivo Excel con todas las películas
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("Películas");
-    
+
             worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
-    
+
             peliculas.forEach((pelicula) => {
                 worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
             });
-    
+
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             });
-    
+
             archivo = {
                 blob,
                 nombre: "Peliculas_Completo.xlsx",
             };
-    
+
             // Descargar el archivo generado
             const a = document.createElement("a");
             a.href = URL.createObjectURL(archivo.blob);
@@ -308,104 +374,168 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-    
+
             // Ocultar el contenedor de carga cuando termine la descarga
             loadingContainer.classList.add("hidden");
-    
+
         } catch (error) {
             console.error("Error al exportar las películas:", error);
             showToast("Hubo un error al exportar las películas.");
             loadingContainer.classList.add("hidden"); // Ocultar contenedor de carga en caso de error
         }
     });
-    
-    
+
 
 
     function cargarCarrito() {
         const peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
         const cartList = document.getElementById("cartList");
-
-        // Limpiar la lista actual
+        mostrarCantidadPeliculas();
         cartList.innerHTML = "";
-
+    
         if (peliculasEnCarrito.length === 0) {
             cartList.innerHTML = "<li><p>No hay películas en el carrito</p></li>";
         } else {
-            // Agrupar las películas por ID y sumar los precios
-            const peliculasAgrupadas = peliculasEnCarrito.reduce((acc, pelicula) => {
-                if (!acc[pelicula.id]) {
-                    acc[pelicula.id] = { ...pelicula, cantidad: 0 };
-                }
-                acc[pelicula.id].cantidad++;
-                acc[pelicula.id].precioTotal = acc[pelicula.id].precio * acc[pelicula.id].cantidad;
-                return acc;
-            }, {});
-
             let totalCarrito = 0;
-            Object.values(peliculasAgrupadas).forEach(pelicula => {
+    
+            peliculasEnCarrito.forEach(pelicula => {
                 const li = document.createElement("div");
                 li.classList.add("card", "card-side", "border-gray-300", "border-b-[1px]", "bg-white", "mb-2", "p-1", "rounded-none");
+                li.setAttribute("id", `item-${pelicula.id}`);
                 li.innerHTML = `
-                <figure><img class="w-[40px] h-[40px]  object-cover rounded-full" src="storage/${pelicula.foto}" alt="${pelicula.nombre}" /></figure>
-                <div class="card-body p-2">
-                    <h2 class="card-title text-xs uppercase">${pelicula.nombre}</h2>
-                    <p class="text-black font-normal text-xs">${formatearNumero(pelicula.precio)} X ${pelicula.cantidad}</p>
-                    <div class="flex gap-2 justify-between w-full">
-                        <p class="text-gray-400 uppercase font-italic text-xs">${pelicula.categoria}</p>
-                        <p class="text-success font-bold text-xs">${pelicula.year}</p>
-                        <div class="hidden">
-                            <button> - </button>
-                               <button> + </button>
+                    <figure><img class="w-[40px] h-[40px] object-cover rounded-full" src="storage/${pelicula.foto}" alt="${pelicula.nombre}" /></figure>
+                    <div class="card-body p-2">
+                        <h2 class="card-title text-xs uppercase">${pelicula.nombre}</h2>
+                        <p class="text-black font-normal text-xs">${formatearNumero(pelicula.precio)} X <span id="cantidad-${pelicula.id}">${pelicula.cantidad}</span></p>
+                        <div class="flex gap-2 justify-between w-full">
+                            <p class="text-gray-400 uppercase font-italic text-xs">${pelicula.categoria}</p>
+                            <p class="text-success font-bold text-xs">${pelicula.year}</p>
+                            <div class="">
+                                <button class="btn btnMenos" data-id="${pelicula.id}"> - </button>
+                                <button class="btn btnMas" data-id="${pelicula.id}"> + </button>
+                            </div>
+                        </div>
+                        <div class="card-actions justify-between">
+                            <button class="absolute rounded-full -top-1 text-white w-5 cursor-pointer h-5 bg-error right-2 btn-lg btn-danger btn-outline eliminar-btn" data-id="${pelicula.id}">X</button>
                         </div>
                     </div>
-                    <div class="card-actions justify-between">
-                        <button class="absolute rounded-full -top-1 text-white w-5 cursor-pointer h-5 bg-error right-2 btn-lg btn-danger btn-outline eliminar-btn" data-id="${pelicula.nombre}">X</button>
-                    </div>
-                </div>
-            `;
+                `;
                 cartList.appendChild(li);
-                totalCarrito += pelicula.precioTotal;
+                totalCarrito += pelicula.precio * pelicula.cantidad;
             });
-
-            // Mostrar el total
+    
+            // Mostrar total del carrito
             const totalElement = document.createElement("div");
             totalElement.classList.add("text-right", "font-normal", "text-xl", "mt-4");
-            totalElement.innerHTML = `Total: $${totalCarrito}`;
+            totalElement.setAttribute("id", "totalCarrito");
+            totalElement.innerHTML = `Total: ${formatearNumero(String(totalCarrito), true)}`;
             cartList.appendChild(totalElement);
-
-            // Crear el botón para abrir el modal
+    
+            // Botón de confirmar venta
             const btnAbrirModal = document.createElement("button");
             btnAbrirModal.classList.add("btn", "btn-success", "mt-4");
             btnAbrirModal.innerHTML = "Confirmar Venta";
             cartList.appendChild(btnAbrirModal);
-
-            // Abrir el modal
-            btnAbrirModal.addEventListener('click', () => {
-                abrirModal();
+            btnAbrirModal.addEventListener("click", abrirModal);
+    
+            // Agregar eventos a los botones de aumentar y disminuir cantidad
+            document.querySelectorAll(".btnMas").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    actualizarCantidad(this.getAttribute("data-id"), 1);
+                });
             });
-
+    
+            document.querySelectorAll(".btnMenos").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    actualizarCantidad(this.getAttribute("data-id"), -1);
+                });
+            });
+    
             // Eliminar película del carrito
-            const eliminarBtns = document.querySelectorAll('.eliminar-btn');
-            eliminarBtns.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const nombre = this.getAttribute('data-id');
-                    eliminarDelCarrito(nombre);
+            document.querySelectorAll(".eliminar-btn").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    eliminarDelCarrito(this.getAttribute("data-id"));
                 });
             });
         }
     }
-
-    // Función para eliminar una película del carrito
-    function eliminarDelCarrito(nombre) {
+    
+    // Función para actualizar la cantidad en el carrito
+    function actualizarCantidad(id, cambio) {
         let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
-        peliculasEnCarrito = peliculasEnCarrito.filter(pelicula => pelicula.nombre !== nombre);
+    
+        // Buscar la película en el carrito
+        const pelicula = peliculasEnCarrito.find(p => p.id == id);
+        
+        if (pelicula) {
+            // Modificar la cantidad
+            pelicula.cantidad = Math.max(1, pelicula.cantidad + cambio);
+    
+            // Actualizar cantidad en el DOM sin recargar todo
+            document.getElementById(`cantidad-${id}`).textContent = pelicula.cantidad;
+        }
+    
+        // Guardar cambios en localStorage
         localStorage.setItem("peliculasCarrito", JSON.stringify(peliculasEnCarrito));
-        cargarCarrito(); // Recargar el carrito
+    
+        // Actualizar total del carrito sin recargar
+        actualizarTotal();
     }
+    
+    // Función para actualizar el total del carrito
+    function actualizarTotal() {
+        let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+        let total = peliculasEnCarrito.reduce((acc, p) => acc + (p.precio * p.cantidad), 0);
+        
+        document.getElementById("totalCarrito").textContent = `Total: ${formatearNumero(String(total), true)}`;
+    }
+    
+    // Función para eliminar una película del carrito
+    function eliminarDelCarrito(id) {
+        let peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+        peliculasEnCarrito = peliculasEnCarrito.filter(pelicula => pelicula.id != id);
+        localStorage.setItem("peliculasCarrito", JSON.stringify(peliculasEnCarrito));
+        actualizarColoresTarjetas(); // 🔴 Actualiza los colores después de eliminar
+        mostrarCantidadPeliculas()
+        // Remover del DOM
+        const item = document.getElementById(`item-${id}`);
+        if (item) {
+            item.remove();
+        }
+    
+        // Actualizar total
+        actualizarTotal();
+    }
+    
+    // Función para abrir el modal
+    function abrirModal() {
+        const modal = document.getElementById("modal_confirmar_carrito");
+        modal.classList.remove("hidden");  // Muestra el modal al quitar la clase hidden
+        modal.classList.add("flex");       // Añade la clase flex para que sea visible
+        cargarDatosPrevios()
+    }
+    
+    // Función para cerrar el div
+    function cerrarModal() {
+        const modal = document.getElementById("modal_confirmar_carrito");
+        modal.classList.remove("flex");    // Quita la clase flex
+        modal.classList.add("hidden");     // Vuelve a ocultar el modal con la clase hidden
+    }
+    
+    // Event listeners para cerrar el modal
+    document.getElementById("btn-cerrar-carrito").addEventListener("click", cerrarModal);
+    document.getElementById("btn-confirmar-carrito").addEventListener("click", () => {
+        localStorage.clear();
+        console.log("Venta confirmada");
+        actualizarColoresTarjetas(); // 🔴 Asegura que se deseleccionen todas las tarjetas
 
-    // Cargar el carrito cuando la página se cargue
+        cargarCarrito();
+        cerrarModal();
+    });
+    
+    // Cargar el carrito al iniciar
     window.onload = cargarCarrito;
+    
 
 
     function listarCategoriasSelect() {
@@ -433,31 +563,197 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 
-    // Función para abrir el modal
-    function abrirModal() {
-        const modal = document.getElementById("modal_confirmar_carrito");
-        modal.showModal(); // Abre el modal
-    }
-
-    // Función para cerrar el modal
-    function cerrarModal() {
-        const modal = document.getElementById("modal_confirmar_carrito");
-        showToast("Película Vendida", "success");
-        modal.close(); // Cierra el modal
-    }
-
-    // Event listener para el botón de cancelar
-    document.getElementById("btn-cerrar-carrito").addEventListener("click", cerrarModal);
-
-    // Event listener para el botón de confirmar
-    document.getElementById("btn-confirmar-carrito").addEventListener("click", () => {
-        // Aquí podrías agregar la lógica para confirmar la venta.
-        localStorage.clear()
-        console.log("Venta confirmada");
-        cargarCarrito();
-        cerrarModal();
+    $('#cliente_select').select2({
+        placeholder: 'Buscar por nombre o identificación',
+        ajax: {
+            url: '/get-clientes',  // Ruta para obtener todos los clientes
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term  // El término de búsqueda
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(cliente => ({
+                        id: cliente.id,
+                        text: cliente.nombre + ' (' + cliente.numero_documento + ')'
+                    }))
+                };
+            },
+            cache: true
+        }
     });
 
+    function mostrarFormulario(tipo) {
+        if (tipo === 'buscar') {
+            document.getElementById("form_cliente").classList.remove("hidden");
+            document.getElementById("crear_cliente").classList.add("hidden");
+        } else {
+            document.getElementById("form_cliente").classList.add("hidden");
+            document.getElementById("crear_cliente").classList.remove("hidden");
+        }
+    }
+    
+    // Evento al seleccionar un cliente del select2
+    $('#cliente_select').on('select2:select', function (e) {
+        const clienteId = e.params.data.id;
+        obtenerCliente(clienteId);
+    });
+    
+    // Obtener los datos del cliente
+    function obtenerCliente(clienteId) {
+        $.get(`/get-clientes/${clienteId}`, function (data) {
+            if (data) {
+                // Si el cliente existe, mostrar el formulario de cliente
+                $("#form_cliente").removeClass("hidden");
+                $("#crear_cliente").addClass("hidden");
+    
+                // Rellenar los campos del formulario con los datos del cliente
+                $("#nombre").val(data.nombre);
+                $("#tipo_documento").val(data.tipo_documento);
+                $("#numero_documento").val(data.numero_documento);
+                $("#email").val(data.email);
+                $("#telefono").val(data.telefono);
+            } else {
+                // Si no existe, mostrar formulario para crear un nuevo cliente
+                $("#form_cliente").addClass("hidden");
+                $("#crear_cliente").removeClass("hidden");
+            }
+        });
+    }
+    
+    // Enviar los datos para crear un nuevo cliente
+    $("#nuevoClienteForm").on("submit", function (e) {
+        e.preventDefault();
+        const token = $('meta[name="csrf-token"]').attr('content');
+    
+        const nuevoCliente = {
+            nombre: $("#nombre_nuevo").val(),
+            tipo_documento: $("#tipo_documento_nuevo").val(),
+            numero_documento: $("#numero_documento_nuevo").val(),
+            email: $("#email_nuevo").val(),
+            telefono: $("#telefono_nuevo").val()
+        };
+    
+        $.ajax({
+            url: '/post-clientes',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token  // Agregar token CSRF en los encabezados correctamente
+            },
+            data: nuevoCliente,
+            success: function (data) {
+                alert('Cliente creado exitosamente');
+                obtenerCliente(data.id);
+            },
+            error: function () {
+                alert('Error al crear el cliente');
+            }
+        });
+    });
+
+    $("#btn-buscar-cliente").on("click", function() {
+        mostrarFormulario('buscar');
+    });
+    $("#btn-registrar-cliente").on("click", function() {
+        mostrarFormulario('registrar');
+    });
+    
+    // Cerrar el modal
+    $("#btn-cerrar-carrito").on("click", function () {
+        const modal = document.getElementById("modal_confirmar_carrito");
+        modal.classList.add('hidden');
+    });
+
+    function mostrarFormulario(tipo) {
+        if (tipo === 'buscar') {
+            $("#form_cliente").removeClass("hidden");
+            $("#crear_cliente").addClass("hidden");
+            $("#btn-buscar-cliente").addClass("hidden");
+            $("#btn-registrar-cliente").removeClass("hidden");
+        } else {
+            $("#form_cliente").addClass("hidden");
+            $("#crear_cliente").removeClass("hidden");
+            $("#btn-buscar-cliente").removeClass("hidden");
+            $("#btn-registrar-cliente").addClass("hidden");
+        }
+    }
+
+
+    function cargarDatosPrevios() {
+        // Ejemplo: obtener datos desde localStorage
+        const datosPrevios = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+    
+        const contenedorDatos = document.getElementById("DatosPrevios");
+        contenedorDatos.innerHTML = ""; // Limpiar contenido previo
+    
+        if (datosPrevios.length === 0) {
+            contenedorDatos.innerHTML = "<p>No hay datos previos.</p>";
+        } else {
+            // Crear tabla con clases de DaisyUI y Tailwind CSS
+            const tabla = document.createElement("table");
+            tabla.classList.add("table", "table-zebra", "w-full", "mt-4");
+    
+            // Crear encabezado de la tabla
+            tabla.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+    
+            // Rellenar la tabla con los datos de cada película
+            datosPrevios.forEach(dato => {
+                tabla.innerHTML += `
+                    <tr>
+                        <td>${dato.id}</td>
+                        <td>${dato.nombre}</td>
+                        <td>${dato.descripcion}</td>
+                        <td>${formatearNumero(dato.precio)}</td>
+                        <td>${dato.cantidad}</td>
+                    </tr>
+                `;
+            });
+    
+            // Cerrar el cuerpo de la tabla
+            tabla.innerHTML += "</tbody>";
+    
+            // Agregar la tabla al contenedor de datos
+            contenedorDatos.appendChild(tabla);
+        }
+    }
+
+
+    function mostrarCantidadPeliculas() {
+        // Obtener las películas del carrito desde localStorage
+        const peliculasEnCarrito = JSON.parse(localStorage.getItem("peliculasCarrito")) || [];
+        
+        // Contar el número de películas únicas en el carrito
+        const cantidadPeliculasUnicas = new Set(peliculasEnCarrito.map(pelicula => pelicula.id)).size;
+        
+        // Mostrar la cantidad en el elemento con id "CantidadItems"
+        if (cantidadPeliculasUnicas > 0) {
+            $("#CantidadItems").text(cantidadPeliculasUnicas).show();
+        } else {
+            $("#CantidadItems").hide(); // Ocultar el badge si no hay películas
+        }
+    }
+
+
+ 
+    
+    
+    
+    
 });
+
 
 
