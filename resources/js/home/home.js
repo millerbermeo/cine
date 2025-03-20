@@ -351,10 +351,10 @@ function actualizarColoresTarjetas() {
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("Películas");
 
-            worksheet.addRow(["Nombre", "Categoría", "Descripción", "Año"]);
+            worksheet.addRow(["Nombre", "Categoría", "Descripción", "Precio","Año"]);
 
             peliculas.forEach((pelicula) => {
-                worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.year]);
+                worksheet.addRow([pelicula.nombre, pelicula.categoria, pelicula.descripcion, pelicula.precio, pelicula.year]);
             });
 
             const buffer = await workbook.xlsx.writeBuffer();
@@ -897,12 +897,6 @@ function actualizarColoresTarjetas() {
             $("#CantidadItems").hide(); // Ocultar el badge si no hay películas
         }
     }
-
-
- 
-    
-    
-    
     
 });
 

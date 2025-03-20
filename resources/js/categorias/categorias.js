@@ -9,13 +9,9 @@ function limpiarFormulario(idFormulario) {
     // Seleccionamos el formulario por su ID
     const formulario = $("#" + idFormulario);
 
-    // Limpiar todos los campos de entrada del formulario
+    // Limpiar todos los campos
     formulario.find("input, textarea, select").val("");
-
-    // Limpiar errores
     formulario.find(".error").text("");
-
-    // Eliminar clases de error de los campos
     formulario.find(".input-error").removeClass("input-error");
 }
 

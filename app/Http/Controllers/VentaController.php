@@ -10,7 +10,10 @@ class VentaController extends Controller
 {
     public function index()
     {
-        return Venta::with(['cliente', 'vendedor', 'productosVentas.pelicula'])->get();
+        return Venta::with(['cliente', 'vendedor', 'productosVentas.pelicula'])
+        ->orderBy('id', 'desc')
+        ->get();
+    
     }
 
     public function store(Request $request)

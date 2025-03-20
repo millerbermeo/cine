@@ -131,7 +131,12 @@
                         </div>
                         <div class="mb-4">
                             <label for="tipo_documento" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
-                            <input type="text" id="tipo_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            {{-- <input type="text" id="tipo_documento" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary"> --}}
+                            <select id="tipo_documento" class="input w-full focus:ring-primary">
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                            </select>
                             <p id="error_tipo_documento" class="text-red-500 text-sm hidden"></p>
 
                         </div>
@@ -171,8 +176,15 @@
                         </div>
                         <div class="mb-4">
                             <label for="tipo_documento_nuevo" class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
-                            <input type="text" id="tipo_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary">
+                            {{-- <input type="text" id="tipo_documento_nuevo" class="input input-bordered w-full rounded-lg p-2 focus:ring-primary"> --}}
+                            <select id="tipo_documento_nuevo" class="input w-full focus:ring-primary">
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                            </select>
                             <p id="error_tipo_documento" class="text-red-500 text-sm hidden"></p>
+
+                            
 
                         </div>
                         <div class="mb-4">
