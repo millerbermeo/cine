@@ -13,7 +13,7 @@ class Venta extends Model
 
     public function cliente()
     {
-        return $this->belongsTo(client::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function vendedor()
