@@ -12,11 +12,14 @@ function renderTable() {
     const ventasData = $("#ventasData");
     const searchValue = $("#searchInput").val().toLowerCase();
     
-    const filteredVentas = ventas.filter(venta => 
-        venta.cliente.nombre.toLowerCase().includes(searchValue) ||
-        venta.vendedor.nombre.toLowerCase().includes(searchValue)
-    );
-
+    const filteredVentas = ventas.filter(venta => {
+        return Object.values(venta).some(value => 
+            typeof value === "string" && value.toLowerCase().includes(searchValue) ||
+            typeof value === "object" && value !== null && JSON.stringify(value).toLowerCase().includes(searchValue)
+        );
+    });
+    
+    
     const start = (currentPage - 1) * limit;
     const paginatedVentas = filteredVentas.slice(start, start + limit);
 

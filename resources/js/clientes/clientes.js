@@ -43,12 +43,12 @@ const renderTable = () => {
     const filteredClientes = clientes.filter((cliente) => {
         const searchWords = searchValue.split(' ').filter(Boolean);
         return searchWords.every(word =>
-            cliente.nombre.toLowerCase().includes(word) ||
-            cliente.tipo_documento.toLowerCase().includes(word) ||
-            cliente.numero_documento.toLowerCase().includes(word) ||
-            cliente.email.toLowerCase().includes(word)
+            Object.values(cliente).some(value => 
+                typeof value === "string" && value.toLowerCase().includes(word)
+            )
         );
     });
+    
 
     const start = (currentPage - 1) * limit;
     const paginatedClientes = filteredClientes.slice(start, start + limit);
