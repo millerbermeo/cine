@@ -27,8 +27,8 @@ function renderTable() {
         paginatedVentas.map(venta => `
             <tr>
                 <td>${venta.id}</td>
-                <td>${venta.cliente.nombre}</td>
-                <td>${venta.vendedor.nombre}</td>
+                <td>${venta.cliente.nombre ?? ''}</td>
+                <td>${venta.vendedor.nombre ?? ''}</td>
                 <td>${new Date(venta.created_at).toLocaleDateString()}</td>
                 <td>
                     <ul>

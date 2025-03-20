@@ -60,10 +60,10 @@ const renderTable = () => {
             <tr>
                 <td>${cliente.id}</td>
                 <td>${cliente.nombre}</td>
-                <td>${cliente.tipo_documento}</td>
-                <td>${cliente.numero_documento}</td>
-                <td>${cliente.email}</td>
-                <td>${cliente.telefono}</td>
+                <td>${cliente.tipo_documento ?? ''}</td>
+                <td>${cliente.numero_documento ?? ''}</td>
+                <td>${cliente.email ?? ''}</td>
+                <td>${cliente.telefono ?? ''}</td>
                 <td>${formatFecha(cliente.created_at)}</td>
                 <td>
                     <label class="swap flex gap-2">
